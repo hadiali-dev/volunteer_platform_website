@@ -166,7 +166,7 @@ class UserController {
       await Promise.all([
         Application.countDocuments({
           volunteer: req.user._id,
-          status: 'accepted',
+          status: { $in: ['accepted', 'approved'] },
         }),
         Application.countDocuments({
           volunteer: req.user._id,
@@ -236,7 +236,16 @@ class UserController {
 
   static async getMyApps(req, res) {
     const pg = pagination(req);
-    const { data, total } = await ApplicationService.getMyApplications(req.user._id, pg);
+    const rawStatus = typeof req.query.status === 'string' ? req.query.status : undefined;
+    const status =
+      rawStatus === 'pending' || rawStatus === 'accepted' || rawStatus === 'rejected'
+        ? rawStatus
+        : undefined;
+
+    const { data, total } = await ApplicationService.getMyApplications(req.user._id, {
+      ...pg,
+      status,
+    });
 
     res.status(200).json({
       status: 'success',

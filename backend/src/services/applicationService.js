@@ -27,8 +27,19 @@ class ApplicationService {
     return Application.create({ volunteer: volunteerId, opportunity: opportunityId });
   }
 
-  static async getMyApplications(volunteerId, { skip = 0, limit = 10 } = {}) {
-    const data = await Application.find({ volunteer: volunteerId })
+  static async getMyApplications(
+    volunteerId,
+    { skip = 0, limit = 10, status } = {},
+  ) {
+    const query = { volunteer: volunteerId };
+
+    if (status === 'accepted') {
+      query.status = { $in: ['accepted', 'approved'] };
+    } else if (status === 'pending' || status === 'rejected') {
+      query.status = status;
+    }
+
+    const data = await Application.find(query)
       .skip(skip)
       .limit(limit)
       .sort({ appliedAt: -1 })
@@ -40,7 +51,7 @@ class ApplicationService {
         },
       });
 
-    const total = await Application.countDocuments({ volunteer: volunteerId });
+    const total = await Application.countDocuments(query);
 
     return { data, total };
   }
