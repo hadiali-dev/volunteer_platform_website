@@ -312,6 +312,16 @@ class UserController {
     );
     res.status(200).json({ status: 'success', data: opportunity });
   }
+
+  static async addReplyToComment(req, res) {
+    const opportunity = await OpportunityService.addReplyToComment(
+      req.params.id,
+      req.params.commentId,
+      req.user._id,
+      req.body.content,
+    );
+    res.status(201).json({ status: 'success', data: opportunity });
+  }
 }
 
 module.exports = { AdminController, UserController };

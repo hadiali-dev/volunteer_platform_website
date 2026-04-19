@@ -9,6 +9,7 @@ const {
   commentSchema,
   opportunitySchema,
   opportunityReviewSchema,
+  replySchema,
   searchSchema,
   statusUpdateSchema,
   volunteerProfileSchema,
@@ -43,6 +44,12 @@ router.post(
   protect,
   validate(commentSchema),
   UserController.addComment,
+);
+router.post(
+  '/opportunities/:id/comments/:commentId/replies',
+  protect,
+  validate(replySchema),
+  UserController.addReplyToComment,
 );
 
 router.patch(

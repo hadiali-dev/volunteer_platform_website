@@ -16,6 +16,10 @@ const populateConfig = [
     select: 'name email role image active createdAt updatedAt',
   },
   {
+    path: 'comments.replies.user',
+    select: 'name email role image active createdAt updatedAt',
+  },
+  {
     path: 'submittedBy',
     select: 'name email role image active createdAt updatedAt',
   },
@@ -230,6 +234,26 @@ class OpportunityService {
     comment.deleteOne();
     await opportunity.save();
 
+    return Opportunity.findById(opportunityId).populate(populateConfig);
+  }
+
+  static async addReplyToComment(opportunityId, commentId, userId, content) {
+    const opportunity = await Opportunity.findById(opportunityId);
+    if (!opportunity) {
+      throw new AppError('Opportunity not found', 404);
+    }
+
+    const comment = opportunity.comments.id(commentId);
+    if (!comment) {
+      throw new AppError('Comment not found', 404);
+    }
+
+    comment.replies.push({
+      user: userId,
+      content,
+    });
+
+    await opportunity.save();
     return Opportunity.findById(opportunityId).populate(populateConfig);
   }
 }

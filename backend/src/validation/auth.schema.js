@@ -69,6 +69,16 @@ const commentSchema = z.object({
   }),
 });
 
+const replySchema = z.object({
+  body: z.object({
+    content: z.string().trim().min(1, 'Reply content is required').max(500),
+  }),
+  params: z.object({
+    id: objectId,
+    commentId: objectId,
+  }),
+});
+
 const statusUpdateSchema = z.object({
   body: z.object({
     status: z.enum(['pending', 'accepted', 'rejected']),
@@ -103,6 +113,7 @@ module.exports = {
   loginSchema,
   opportunitySchema,
   opportunityReviewSchema,
+  replySchema,
   searchSchema,
   signupSchema,
   statusUpdateSchema,

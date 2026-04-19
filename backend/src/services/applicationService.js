@@ -1,5 +1,4 @@
 const Application = require('../models/application');
-const Notification = require('../models/Notification');
 const Opportunity = require('../models/opportunity');
 const VolunteerProfile = require('../models/volunteerProfile');
 const AppError = require('../utils/AppError');
@@ -81,25 +80,16 @@ class ApplicationService {
       throw new AppError('Application not found', 404);
     }
 
+    const previousStatus = app.status;
     app.status = status;
     await app.save();
 
-    if (status === 'accepted') {
+    if (status === 'accepted' && previousStatus !== 'accepted') {
       await VolunteerProfile.findOneAndUpdate(
         { user: app.volunteer },
         { $inc: { totalHours: app.opportunity.hours || 0 } },
         { upsert: true, new: true, setDefaultsOnInsert: true },
       );
-    }
-
-    if (status === 'accepted' || status === 'rejected') {
-      await Notification.create({
-        user: app.volunteer,
-        message:
-          status === 'accepted'
-            ? `You were accepted for "${app.opportunity.title}".`
-            : `Your application for "${app.opportunity.title}" was rejected.`,
-      });
     }
 
     return Application.findById(appId)
