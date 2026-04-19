@@ -1,0 +1,1145 @@
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\app\globals.css ===== 
+@import "tailwindcss";
+
+:root {
+  --background: #f8fff8;
+  --foreground: #163322;
+  --surface: #ffffff;
+  --surface-strong: #effbef;
+  --accent: #169b62;
+  --accent-strong: #0f7d4f;
+  --accent-soft: rgba(22, 155, 98, 0.12);
+  --border-soft: rgba(15, 125, 79, 0.12);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-border-soft: var(--border-soft);
+  --font-sans: var(--font-noto-kufi-arabic);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-noto-kufi-arabic), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: rgba(22, 155, 98, 0.2);
+}
+
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 700ms ease-out both;
+}
+
+.animate-float-gentle {
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\app\layout.tsx ===== 
+import type { Metadata } from "next";
+import { Geist_Mono, Noto_Kufi_Arabic } from "next/font/google";
+import type { ReactElement } from "react";
+
+import { Providers } from "@/lib/providers";
+
+import "./globals.css";
+
+const notoKufiArabic = Noto_Kufi_Arabic({
+  variable: "--font-noto-kufi-arabic",
+  subsets: ["arabic"],
+  weight: ["400", "500", "700"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "فولنتير",
+  description:
+    "منصة تطوع عربية بواجهة سهلة لإدارة الحسابات واستكشاف الفرص التطوعية.",
+};
+
+interface RootLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function RootLayout({ children }: RootLayoutProps): ReactElement {
+  return (
+    <html
+      lang="ar"
+      dir="rtl"
+      className={`${notoKufiArabic.variable} ${geistMono.variable} h-full antialiased`}
+    >
+      <body className="min-h-full">
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\app\page.tsx ===== 
+import Image from "next/image";
+import Link from "next/link";
+import type { ReactElement } from "react";
+
+import { auth } from "@/lib/auth";
+
+export default async function HomePage(): Promise<ReactElement> {
+  const session = await auth();
+
+  return (
+    <main className="relative min-h-screen overflow-hidden px-5 py-14 sm:px-8">
+      <Image
+        src="https://images.pexels.com/photos/2608517/pexels-photo-2608517.jpeg?auto=compress&cs=tinysrgb&w=1920"
+        alt="متطوعون يعملون معًا في نشاط مجتمعي"
+        fill
+        priority
+        unoptimized
+        className="object-cover"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(6,30,19,0.55),rgba(10,63,39,0.42))]" />
+
+      <section className="relative mx-auto grid w-full max-w-5xl gap-6 rounded-3xl border border-white/35 bg-white/88 p-8 shadow-[0_30px_90px_rgba(8,65,38,0.22)] backdrop-blur sm:p-12">
+        <p className="w-fit rounded-full bg-accent-soft px-3 py-1 text-xs font-bold text-accent-strong">
+          منصة فولنتير
+        </p>
+
+        <h1 className="text-3xl font-bold leading-[1.7] text-foreground sm:text-4xl">
+          {session?.user?.name
+            ? `أهلًا بك ${session.user.name} في مجتمع التطوع.`
+            : "مرحبًا بك في فولنتير"}
+        </h1>
+
+        <p className="max-w-3xl text-sm leading-8 text-emerald-900/75 sm:text-base">
+          منصة عربية تجمع المتطوعين والجهات المنظمة في تجربة واضحة وسريعة للوصول
+          إلى فرص التطوع والمشاركة في صنع أثر حقيقي.
+        </p>
+
+        <div className="flex flex-wrap gap-3">
+          <Link
+            href="/login"
+            prefetch
+            className="inline-flex h-11 items-center justify-center rounded-xl border border-border-soft bg-white px-4 text-sm font-semibold text-foreground transition hover:bg-emerald-50"
+          >
+            تسجيل الدخول
+          </Link>
+          <Link
+            href="/register"
+            prefetch
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-accent px-4 text-sm font-semibold text-white transition hover:bg-accent-strong"
+          >
+            إنشاء حساب
+          </Link>
+        </div>
+      </section>
+    </main>
+  );
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\app\(auth)\layout.tsx ===== 
+import type { Metadata } from "next";
+import type { ReactElement } from "react";
+
+export const metadata: Metadata = {
+  title: "المصادقة | فولنتير",
+  description: "صفحات تسجيل الدخول وإنشاء الحساب في منصة فولنتير.",
+};
+
+interface AuthLayoutProps {
+  children: React.ReactNode;
+}
+
+export default function AuthLayout({ children }: AuthLayoutProps): ReactElement {
+  return (
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(22,155,98,0.15),transparent_36%),linear-gradient(180deg,#f8fff8_0%,#ffffff_45%,#f4fff7_100%)]">
+      <section className="mx-auto flex min-h-screen w-full max-w-6xl items-center px-4 py-10 sm:px-8">
+        <div className="grid w-full gap-7 rounded-3xl border border-border-soft bg-white/80 p-6 shadow-[0_25px_80px_rgba(10,60,35,0.08)] backdrop-blur sm:p-10 lg:grid-cols-2">
+          <div className="order-2 flex flex-col justify-center gap-4 lg:order-1">
+            <p className="w-fit rounded-full bg-accent-soft px-3 py-1 text-xs font-bold text-accent-strong">
+              منصة تطوع عربية
+            </p>
+            <h1 className="text-3xl font-bold leading-[1.6] text-foreground sm:text-4xl">
+              مكان واحد لإدارة حسابك والتطوع بثقة
+            </h1>
+            <p className="text-sm leading-8 text-emerald-900/75 sm:text-base">
+              سجل الدخول أو أنشئ حسابًا جديدًا للوصول إلى فرص التطوع، متابعة الطلبات،
+              والتواصل مع الجهات المنظمة.
+            </p>
+
+            <div className="mt-2 flex items-center gap-4 rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white shadow-sm">
+                <svg
+                  viewBox="0 0 64 64"
+                  className="h-9 w-9 text-accent"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden
+                >
+                  <path
+                    d="M31 52V34"
+                    stroke="currentColor"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M31 36C31 24 39 16 52 14C50 27 42 35 31 36Z"
+                    fill="currentColor"
+                    fillOpacity="0.25"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M31 31C31 20 24 13 12 11C13 23 20 30 31 31Z"
+                    fill="currentColor"
+                    fillOpacity="0.18"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M22 52H40"
+                    stroke="currentColor"
+                    strokeWidth="3.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-emerald-900">
+                  أثرك يبدأ بخطوة صغيرة
+                </p>
+                <p className="text-xs leading-6 text-emerald-900/70">
+                  مع كل مساهمة تطوعية نزرع أثرًا أجمل في المجتمع.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="order-1 rounded-2xl border border-border-soft bg-white p-5 shadow-sm sm:p-7 lg:order-2">
+            {children}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\app\(auth)\login\page.tsx ===== 
+import { LoginForm } from "@/features/auth";
+import type { ReactElement } from "react";
+
+export default function LoginPage(): ReactElement {
+  return (
+    <div className="grid gap-5">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold text-foreground">تسجيل الدخول</h2>
+        <p className="text-sm text-emerald-900/75">
+          أدخل بياناتك للوصول إلى حسابك.
+        </p>
+      </div>
+      <LoginForm />
+    </div>
+  );
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\app\(auth)\register\page.tsx ===== 
+import { RegisterForm } from "@/features/auth";
+import type { ReactElement } from "react";
+
+export default function RegisterPage(): ReactElement {
+  return (
+    <div className="grid gap-5">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold text-foreground">إنشاء حساب</h2>
+        <p className="text-sm text-emerald-900/75">
+          أنشئ حسابك الآن وابدأ رحلتك في العمل التطوعي.
+        </p>
+      </div>
+      <RegisterForm />
+    </div>
+  );
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\app\(dashboard)\layout.tsx ===== 
+import { redirect } from "next/navigation";
+import type { ReactElement } from "react";
+
+import { auth } from "@/lib/auth";
+
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+}
+
+export default async function DashboardLayout({
+  children,
+}: DashboardLayoutProps): Promise<ReactElement> {
+  const session = await auth();
+
+  if (!session?.accessToken) {
+    redirect("/login");
+  }
+
+  return <>{children}</>;
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\app\api\auth\[...nextauth]\route.ts ===== 
+import { handlers } from "@/lib/auth";
+
+export const { GET, POST } = handlers;
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\features\auth\actions.ts ===== 
+"use server";
+
+import { actionClient } from "@/lib/safe-action";
+
+import { loginUser, signupUser } from "@/features/auth/api";
+import { LoginInputSchema, SignupInputSchema } from "@/features/auth/schemas";
+
+export const loginAction = actionClient
+  .inputSchema(LoginInputSchema)
+  .action(async ({ parsedInput }) => {
+    return loginUser(parsedInput);
+  });
+
+export const signupAction = actionClient
+  .inputSchema(SignupInputSchema)
+  .action(async ({ parsedInput }) => {
+    return signupUser(parsedInput);
+  });
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\features\auth\api.ts ===== 
+import { api } from "@/lib/api";
+
+import {
+  AuthSuccessResponseSchema,
+  LoginInputSchema,
+  SignupInputSchema,
+  type AuthSuccessResponse,
+  type LoginInput,
+  type SignupInput,
+} from "@/features/auth/schemas";
+
+export const loginUser = async (
+  credentials: LoginInput,
+): Promise<AuthSuccessResponse> => {
+  const payload = LoginInputSchema.parse(credentials);
+  const response = await api.post("/api/auth/login", payload);
+  return AuthSuccessResponseSchema.parse(response.data);
+};
+
+export const signupUser = async (
+  input: SignupInput,
+): Promise<AuthSuccessResponse> => {
+  const payload = SignupInputSchema.parse(input);
+  const response = await api.post("/api/auth/signup", payload);
+  return AuthSuccessResponseSchema.parse(response.data);
+};
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\features\auth\hooks.ts ===== 
+"use client";
+
+import { useMutation, type UseMutationResult } from "@tanstack/react-query";
+import { signIn } from "next-auth/react";
+
+import { SignupInputSchema, type LoginInput, type SignupInput } from "@/features/auth/schemas";
+import { signupUser } from "@/features/auth/api";
+import { AppError } from "@/types";
+
+interface CredentialsSignInResult {
+  ok: boolean;
+  status: number;
+  url: string | null;
+}
+
+const loginWithCredentials = async (
+  email: string,
+  password: string,
+): Promise<CredentialsSignInResult> => {
+  const result = await signIn("credentials", {
+    email,
+    password,
+    redirect: false,
+  });
+
+  if (!result) {
+    throw new AppError("تعذر تسجيل الدخول. حاول مرة أخرى.", 500);
+  }
+
+  if (result.error) {
+    throw new AppError(result.error, 401);
+  }
+
+  return {
+    ok: result.ok,
+    status: result.status,
+    url: result.url,
+  };
+};
+
+export const useLogin = (): UseMutationResult<
+  CredentialsSignInResult,
+  Error,
+  LoginInput
+> => {
+  return useMutation({
+    mutationFn: async (credentials) => {
+      return loginWithCredentials(credentials.email, credentials.password);
+    },
+  });
+};
+
+export const useSignup = (): UseMutationResult<
+  CredentialsSignInResult,
+  Error,
+  SignupInput
+> => {
+  return useMutation({
+    mutationFn: async (payload) => {
+      const parsedPayload = SignupInputSchema.parse(payload);
+      await signupUser(parsedPayload);
+
+      return loginWithCredentials(parsedPayload.email, parsedPayload.password);
+    },
+  });
+};
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\features\auth\index.ts ===== 
+export * from "@/features/auth/actions";
+export * from "@/features/auth/api";
+export * from "@/features/auth/hooks";
+export * from "@/features/auth/schemas";
+export { LoginForm } from "@/features/auth/components/LoginForm";
+export { RegisterForm } from "@/features/auth/components/RegisterForm";
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\features\auth\schemas.ts ===== 
+import { z } from "zod";
+
+export const RoleSchema = z.enum(["student", "organization"]);
+
+export const LoginInputSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email("البريد الإلكتروني غير صالح."),
+  password: z
+    .string()
+    .min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل."),
+});
+
+export const SignupInputSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(3, "الاسم يجب أن يكون 3 أحرف على الأقل."),
+  email: z
+    .string()
+    .trim()
+    .email("البريد الإلكتروني غير صالح."),
+  password: z
+    .string()
+    .min(6, "كلمة المرور يجب أن تكون 6 أحرف على الأقل."),
+  role: z.enum(["student", "organization"]).optional(),
+});
+
+export const AuthUserSchema = z.object({
+  _id: z.string(),
+  name: z.string(),
+  email: z.string().email(),
+  role: RoleSchema,
+  image: z.string().nullable(),
+  active: z.boolean(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+});
+
+export const AuthSuccessResponseSchema = z.object({
+  status: z.literal("success"),
+  token: z.string(),
+  data: z.object({
+    user: AuthUserSchema,
+  }),
+});
+
+export const AuthErrorResponseSchema = z.object({
+  status: z.string(),
+  message: z.string(),
+});
+
+export type LoginInput = z.infer<typeof LoginInputSchema>;
+export type SignupInput = z.infer<typeof SignupInputSchema>;
+export type AuthUserPayload = z.infer<typeof AuthUserSchema>;
+export type AuthSuccessResponse = z.infer<typeof AuthSuccessResponseSchema>;
+export type AuthErrorResponse = z.infer<typeof AuthErrorResponseSchema>;
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\features\auth\components\LoginForm.tsx ===== 
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type { ReactElement } from "react";
+import { useForm } from "react-hook-form";
+
+import { LoginInputSchema, type LoginInput } from "@/features/auth/schemas";
+import { useLogin } from "@/features/auth/hooks";
+import { AppError } from "@/types";
+
+export function LoginForm(): ReactElement {
+  const router = useRouter();
+  const loginMutation = useLogin();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginInput>({
+    resolver: zodResolver(LoginInputSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = async (values: LoginInput): Promise<void> => {
+    await loginMutation.mutateAsync(values);
+    router.replace("/");
+    router.refresh();
+  };
+
+  const globalError =
+    loginMutation.error instanceof AppError
+      ? loginMutation.error.message
+      : loginMutation.error instanceof Error
+        ? loginMutation.error.message
+        : null;
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      <div className="grid gap-2">
+        <label htmlFor="email" className="text-sm font-semibold text-foreground">
+          البريد الإلكتروني
+        </label>
+        <input
+          id="email"
+          type="email"
+          autoComplete="email"
+          placeholder="name@example.com"
+          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          {...register("email")}
+        />
+        {errors.email ? (
+          <p className="text-sm text-red-600">{errors.email.message}</p>
+        ) : null}
+      </div>
+
+      <div className="grid gap-2">
+        <label htmlFor="password" className="text-sm font-semibold text-foreground">
+          كلمة المرور
+        </label>
+        <input
+          id="password"
+          type="password"
+          autoComplete="current-password"
+          placeholder="أدخل كلمة المرور"
+          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          {...register("password")}
+        />
+        {errors.password ? (
+          <p className="text-sm text-red-600">{errors.password.message}</p>
+        ) : null}
+      </div>
+
+      {globalError ? (
+        <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{globalError}</p>
+      ) : null}
+
+      <button
+        type="submit"
+        disabled={isSubmitting || loginMutation.isPending}
+        className="h-12 rounded-xl bg-accent text-sm font-bold text-white transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-70"
+      >
+        {isSubmitting || loginMutation.isPending ? "جاري تسجيل الدخول..." : "تسجيل الدخول"}
+      </button>
+
+      <p className="text-sm text-emerald-900/80">
+        ليس لديك حساب؟{" "}
+        <Link href="/register" className="font-bold text-accent hover:text-accent-strong">
+          إنشاء حساب جديد
+        </Link>
+      </p>
+    </form>
+  );
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\features\auth\components\RegisterForm.tsx ===== 
+"use client";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import type { ReactElement } from "react";
+import { useForm } from "react-hook-form";
+
+import { useSignup } from "@/features/auth/hooks";
+import { SignupInputSchema, type SignupInput } from "@/features/auth/schemas";
+import { AppError } from "@/types";
+
+export function RegisterForm(): ReactElement {
+  const router = useRouter();
+  const signupMutation = useSignup();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<SignupInput>({
+    resolver: zodResolver(SignupInputSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      role: "student",
+    },
+  });
+
+  const onSubmit = async (values: SignupInput): Promise<void> => {
+    await signupMutation.mutateAsync(values);
+    router.replace("/");
+    router.refresh();
+  };
+
+  const globalError =
+    signupMutation.error instanceof AppError
+      ? signupMutation.error.message
+      : signupMutation.error instanceof Error
+        ? signupMutation.error.message
+        : null;
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      <div className="grid gap-2">
+        <label htmlFor="name" className="text-sm font-semibold text-foreground">
+          الاسم الكامل
+        </label>
+        <input
+          id="name"
+          type="text"
+          autoComplete="name"
+          placeholder="أدخل اسمك الكامل"
+          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          {...register("name")}
+        />
+        {errors.name ? <p className="text-sm text-red-600">{errors.name.message}</p> : null}
+      </div>
+
+      <div className="grid gap-2">
+        <label htmlFor="email" className="text-sm font-semibold text-foreground">
+          البريد الإلكتروني
+        </label>
+        <input
+          id="email"
+          type="email"
+          autoComplete="email"
+          placeholder="name@example.com"
+          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          {...register("email")}
+        />
+        {errors.email ? (
+          <p className="text-sm text-red-600">{errors.email.message}</p>
+        ) : null}
+      </div>
+
+      <div className="grid gap-2">
+        <label htmlFor="password" className="text-sm font-semibold text-foreground">
+          كلمة المرور
+        </label>
+        <input
+          id="password"
+          type="password"
+          autoComplete="new-password"
+          placeholder="6 أحرف على الأقل"
+          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          {...register("password")}
+        />
+        {errors.password ? (
+          <p className="text-sm text-red-600">{errors.password.message}</p>
+        ) : null}
+      </div>
+
+      <div className="grid gap-2">
+        <label htmlFor="role" className="text-sm font-semibold text-foreground">
+          نوع الحساب
+        </label>
+        <select
+          id="role"
+          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          {...register("role")}
+        >
+          <option value="student">متطوع</option>
+          <option value="organization">جهة منظمة</option>
+        </select>
+      </div>
+
+      {globalError ? (
+        <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{globalError}</p>
+      ) : null}
+
+      <button
+        type="submit"
+        disabled={isSubmitting || signupMutation.isPending}
+        className="h-12 rounded-xl bg-accent text-sm font-bold text-white transition hover:bg-accent-strong disabled:cursor-not-allowed disabled:opacity-70"
+      >
+        {isSubmitting || signupMutation.isPending ? "جاري إنشاء الحساب..." : "إنشاء الحساب"}
+      </button>
+
+      <p className="text-sm text-emerald-900/80">
+        لديك حساب بالفعل؟{" "}
+        <Link href="/login" className="font-bold text-accent hover:text-accent-strong">
+          تسجيل الدخول
+        </Link>
+      </p>
+    </form>
+  );
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\lib\api.ts ===== 
+import axios, {
+  AxiosError,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from "axios";
+
+import { AuthErrorResponseSchema } from "@/features/auth/schemas";
+import { env } from "@/lib/env";
+import { AppError } from "@/types";
+
+const LOGIN_PATH = "/login";
+const AUTH_ENDPOINTS = ["/api/auth/login", "/api/auth/signup"];
+
+const shouldSkipTokenInjection = (url: string | undefined): boolean =>
+  AUTH_ENDPOINTS.some((endpoint) => url?.includes(endpoint));
+
+const parseErrorMessage = (error: AxiosError<unknown>): string => {
+  const parsed = AuthErrorResponseSchema.safeParse(error.response?.data);
+  if (parsed.success) {
+    return parsed.data.message;
+  }
+
+  if (error.message) {
+    return error.message;
+  }
+
+  return "حدث خطأ غير متوقع.";
+};
+
+const api = axios.create({
+  baseURL: env.NEXT_PUBLIC_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+api.interceptors.request.use(
+  async (
+    config: InternalAxiosRequestConfig,
+  ): Promise<InternalAxiosRequestConfig> => {
+    if (shouldSkipTokenInjection(config.url)) {
+      return config;
+    }
+
+    let accessToken: string | undefined;
+
+    if (typeof window === "undefined") {
+      const { auth } = await import("@/lib/auth");
+      const session = await auth();
+      accessToken = session?.accessToken;
+    } else {
+      const { getSession } = await import("next-auth/react");
+      const session = await getSession();
+      accessToken = session?.accessToken;
+    }
+
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
+    return config;
+  },
+);
+
+api.interceptors.response.use(
+  (response: AxiosResponse): AxiosResponse => response,
+  async (error: AxiosError<unknown>) => {
+    const statusCode = error.response?.status;
+    const message = parseErrorMessage(error);
+
+    if (statusCode === 401) {
+      if (typeof window !== "undefined") {
+        const { signOut } = await import("next-auth/react");
+        await signOut({ redirect: false });
+        window.location.href = LOGIN_PATH;
+      }
+
+      return Promise.reject(new AppError(message, 401));
+    }
+
+    if (statusCode !== undefined && statusCode >= 500) {
+      return Promise.reject(new AppError(message, statusCode));
+    }
+
+    if (statusCode !== undefined) {
+      return Promise.reject(new AppError(message, statusCode));
+    }
+
+    return Promise.reject(
+      new AppError("تعذر الاتصال بالخادم. يرجى المحاولة مرة أخرى.", 500),
+    );
+  },
+);
+
+export { api };
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\lib\auth.ts ===== 
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import { AxiosError } from "axios";
+
+import { loginUser } from "@/features/auth/api";
+import {
+  AuthErrorResponseSchema,
+  LoginInputSchema,
+  RoleSchema,
+} from "@/features/auth/schemas";
+
+const getAuthErrorMessage = (error: unknown): string => {
+  if (error instanceof AxiosError) {
+    const parsed = AuthErrorResponseSchema.safeParse(error.response?.data);
+    if (parsed.success) {
+      return parsed.data.message;
+    }
+  }
+
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  return "تعذر تسجيل الدخول. حاول مرة أخرى.";
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth({
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/login",
+  },
+  providers: [
+    Credentials({
+      name: "تسجيل الدخول",
+      credentials: {
+        email: { label: "البريد الإلكتروني", type: "email" },
+        password: { label: "كلمة المرور", type: "password" },
+      },
+      authorize: async (credentials) => {
+        const parsed = LoginInputSchema.safeParse(credentials);
+        if (!parsed.success) {
+          throw new Error("بيانات تسجيل الدخول غير صالحة.");
+        }
+
+        try {
+          const result = await loginUser(parsed.data);
+          return {
+            id: result.data.user._id,
+            name: result.data.user.name,
+            email: result.data.user.email,
+            role: result.data.user.role,
+            image: result.data.user.image,
+            active: result.data.user.active,
+            accessToken: result.token,
+          };
+        } catch (error) {
+          throw new Error(getAuthErrorMessage(error));
+        }
+      },
+    }),
+  ],
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.role = user.role;
+        token.image = user.image ?? null;
+        token.active = user.active;
+        token.accessToken = user.accessToken;
+      }
+
+      return token;
+    },
+    session: async ({ session, token }) => {
+      if (session.user) {
+        session.user.id = typeof token.id === "string" ? token.id : "";
+        session.user.name = typeof token.name === "string" ? token.name : "";
+        session.user.email = typeof token.email === "string" ? token.email : "";
+        session.user.image = typeof token.image === "string" ? token.image : null;
+        session.user.active = token.active === true;
+
+        const parsedRole = RoleSchema.safeParse(token.role);
+        session.user.role = parsedRole.success ? parsedRole.data : "student";
+      }
+
+      session.accessToken =
+        typeof token.accessToken === "string" ? token.accessToken : "";
+      return session;
+    },
+  },
+});
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\lib\env.ts ===== 
+import { z } from "zod";
+
+const clientEnvSchema = z.object({
+  NEXT_PUBLIC_API_URL: z.string().url(),
+});
+
+const serverEnvSchema = clientEnvSchema.extend({
+  NEXTAUTH_SECRET: z.string().min(32),
+  NEXTAUTH_URL: z.string().url(),
+});
+
+const clientEnv = clientEnvSchema.parse({
+  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+});
+
+const serverEnv =
+  typeof window === "undefined"
+    ? serverEnvSchema.parse({
+        NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+        NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+        NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+      })
+    : null;
+
+export const env = {
+  ...clientEnv,
+  ...(serverEnv ?? {}),
+};
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\lib\query-client.ts ===== 
+import { QueryClient } from "@tanstack/react-query";
+
+const STALE_TIME_MS = 1000 * 60 * 2;
+
+const makeQueryClient = (): QueryClient =>
+  new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: STALE_TIME_MS,
+        retry: 1,
+        refetchOnWindowFocus: false,
+      },
+      mutations: {
+        retry: 0,
+      },
+    },
+  });
+
+let browserQueryClient: QueryClient | undefined;
+
+export const getQueryClient = (): QueryClient => {
+  if (typeof window === "undefined") {
+    return makeQueryClient();
+  }
+
+  if (!browserQueryClient) {
+    browserQueryClient = makeQueryClient();
+  }
+
+  return browserQueryClient;
+};
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\lib\safe-action.ts ===== 
+import { createSafeActionClient } from "next-safe-action";
+
+import { AppError } from "@/types";
+
+export const actionClient = createSafeActionClient({
+  handleServerError: (error) => {
+    if (error instanceof AppError) {
+      return error.message;
+    }
+
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    return "حدث خطأ غير متوقع أثناء تنفيذ العملية.";
+  },
+});
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\lib\utils.ts ===== 
+import type { ClassValue } from "clsx";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export const cn = (...inputs: ClassValue[]): string => twMerge(clsx(inputs));
+
+export const formatDate = (value: string | Date): string => {
+  const date = typeof value === "string" ? new Date(value) : value;
+  return new Intl.DateTimeFormat("ar-SA", { dateStyle: "medium" }).format(date);
+};
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\lib\providers.tsx ===== 
+"use client";
+
+import { QueryClientProvider } from "@tanstack/react-query";
+import { SessionProvider } from "next-auth/react";
+import type { ReactElement } from "react";
+import { useState } from "react";
+
+import { getQueryClient } from "@/lib/query-client";
+
+interface ProvidersProps {
+  children: React.ReactNode;
+}
+
+export function Providers({ children }: ProvidersProps): ReactElement {
+  const [queryClient] = useState(getQueryClient);
+
+  return (
+    <SessionProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </SessionProvider>
+  );
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\types\api.ts ===== 
+export interface ApiResponse<T> {
+  status: string;
+  message?: string;
+  data: T;
+}
+
+export interface PaginatedResponse<T> {
+  status: string;
+  results: number;
+  page: number;
+  total: number;
+  message?: string;
+  data: T[];
+}
+
+export class AppError extends Error {
+  public readonly status: string;
+  public readonly statusCode: number;
+
+  public constructor(
+    message: string,
+    statusCode: number = 500,
+    status: string = "error",
+  ) {
+    super(message);
+    this.name = "AppError";
+    this.statusCode = statusCode;
+    this.status = status;
+  }
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\types\auth.ts ===== 
+import type { DefaultSession } from "next-auth";
+
+export type Role = "student" | "organization" | "admin";
+
+export interface AuthUser {
+  _id: string;
+  name: string;
+  email: string;
+  role: Role;
+  image: string | null;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type AuthSessionUser = DefaultSession["user"] & {
+  id: string;
+  role: Role;
+  active: boolean;
+  image: string | null;
+};
+
+declare module "next-auth" {
+  interface Session {
+    user: AuthSessionUser;
+    accessToken: string;
+  }
+
+  interface User {
+    id: string;
+    name: string;
+    email: string;
+    role: Role;
+    image?: string | null;
+    active: boolean;
+    accessToken: string;
+  }
+}
+ 
+===== FILE: C:\Users\TOSHIBA\Downloads\next_js\my-app\src\types\index.ts ===== 
+export * from "@/types/api";
+export * from "@/types/auth";
+ 
