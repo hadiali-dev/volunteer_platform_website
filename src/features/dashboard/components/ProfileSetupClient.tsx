@@ -85,8 +85,8 @@ export function ProfileSetupClient(): ReactElement {
       <DashboardHeader unreadNotificationsCount={unreadNotificationsCount} />
 
       <main className="mx-auto w-full max-w-5xl px-6 py-8 sm:px-10 lg:px-12">
-        <section className="overflow-hidden rounded-3xl border border-emerald-100 bg-gradient-to-b from-emerald-50/70 via-white to-white shadow-[0_14px_36px_rgba(17,94,89,0.12)]">
-          <div className="border-b border-emerald-100/70 bg-white/70 px-6 py-5 sm:px-8">
+        <section className="overflow-hidden rounded-3xl border border-border-soft bg-gradient-to-b from-accent-soft via-surface to-surface-strong shadow-[0_14px_36px_rgba(17,94,89,0.12)]">
+          <div className="border-b border-border-soft bg-surface/80 px-6 py-5 sm:px-8">
             <p className="text-sm font-semibold text-emerald-700">الخطوة التالية بعد التسجيل</p>
             <h1 className="mt-1 text-3xl font-bold text-foreground sm:text-4xl">
               أكمل ملفك الشخصي
