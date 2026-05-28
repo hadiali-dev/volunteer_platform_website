@@ -57,7 +57,7 @@ export function OpportunityFilters({
 
   return (
     <div className="mx-auto w-full max-w-7xl px-6">
-      <div className="relative -mt-4">
+      <div className="relative mt-10">
         <div className="rounded-2xl input-surface border border-border-soft p-3 shadow-md backdrop-blur-sm flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="flex-1 min-w-0">
             <label htmlFor="search" className="sr-only">
@@ -83,6 +83,19 @@ export function OpportunityFilters({
                 <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
                 <path d="M20 20L17 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
+            </div>
+
+            {/* Match button placed under the search bar, aligned left visually */}
+            <div className="mt-3 flex justify-end">
+              <button
+                type="button"
+                onClick={() => onMatchToggle && onMatchToggle()}
+                className={`inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold transition ${
+                  matchActive ? "bg-accent text-white" : "border border-accent text-accent"
+                }`}
+              >
+                {matchActive ? "مطابقة مفعّلة" : "مطابقة مهاراتي"}
+              </button>
             </div>
           </div>
 
@@ -220,15 +233,7 @@ export function OpportunityFilters({
               مسح
             </button>
 
-            <button
-              type="button"
-              onClick={() => onMatchToggle && onMatchToggle()}
-              className={`inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold transition ${
-                matchActive ? "bg-accent text-white" : "border border-accent text-accent"
-              }`}
-            >
-              {matchActive ? "مطابقة مفعّلة" : "مطابقة مهاراتي"}
-            </button>
+            
           </div>
         </div>
       </div>
