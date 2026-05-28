@@ -56,7 +56,11 @@ const toRequestPayload = (
 const fieldClassName =
   "h-11 w-full rounded-lg border border-border-soft bg-surface px-3 text-sm text-foreground outline-none transition-colors focus:border-2 focus:border-accent";
 
-export function OpportunityRequestForm(): ReactElement {
+interface OpportunityRequestFormProps {
+  variant?: "default" | "hero";
+}
+
+export function OpportunityRequestForm({ variant = "default" }: OpportunityRequestFormProps): ReactElement {
   const [isOpen, setIsOpen] = useState(false);
   const mutation = useSubmitOpportunityRequest();
 
@@ -90,12 +94,18 @@ export function OpportunityRequestForm(): ReactElement {
     setIsOpen(false);
   };
 
+  const toggleBtnClass =
+    variant === "hero"
+      ? "inline-flex h-12 items-center justify-center rounded-lg bg-accent px-5 text-base font-semibold text-white transition-colors hover:bg-accent-strong shadow-md"
+      : "inline-flex h-10 items-center justify-center rounded-lg bg-accent px-4 text-sm font-semibold text-white transition-colors hover:bg-accent-strong";
+
   return (
     <>
       <button
         type="button"
+        aria-haspopup="dialog"
         onClick={() => setIsOpen(true)}
-        className="inline-flex h-10 items-center justify-center rounded-lg bg-accent px-4 text-sm font-semibold text-white transition-colors hover:bg-accent-strong"
+        className={toggleBtnClass}
       >
         إضافة طلب فرصة
       </button>

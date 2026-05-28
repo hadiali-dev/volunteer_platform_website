@@ -33,13 +33,15 @@ export function AnnouncementBanner({
   return (
     <section
       className="relative w-full overflow-hidden rounded-2xl border border-emerald-300/40 p-6 sm:p-8 lg:p-10"
-      style={{
-        backgroundImage: `linear-gradient(140deg, rgba(9,64,43,0.9), rgba(24,163,102,0.7)), url(${announcement.backgroundImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
     >
-      <div className="relative flex min-h-40 flex-col justify-center gap-3">
+      <div
+        className="absolute inset-0 bg-center bg-no-repeat [background-size:contain] sm:[background-size:cover]"
+        style={{
+          backgroundImage: `url(${announcement.backgroundImage})`,
+        }}
+      />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/80 via-emerald-800/65 to-emerald-500/70" />
+      <div className="relative flex min-h-48 flex-col justify-center gap-3 sm:min-h-40">
         <span className="w-fit rounded-full bg-emerald-50/90 px-3 py-1 text-xs font-semibold text-emerald-800">
           إعلان مميز
         </span>

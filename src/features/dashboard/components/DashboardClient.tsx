@@ -107,7 +107,7 @@ export function DashboardClient(): ReactElement {
       <main className="mx-auto w-full max-w-7xl px-6 py-8 sm:px-8 lg:px-12">
         <section className="flex flex-col gap-8">
           {/* Hero Banner */}
-          <div className="relative overflow-hidden rounded-xl bg-surface p-6 sm:p-8 border border-border-soft shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <div className="relative overflow-hidden rounded-xl bg-surface p-6 sm:p-8 border border-border-soft shadow-[0_6px_18px_rgba(0,0,0,0.06)]">
             <div className="absolute top-0 left-0 h-full w-1.5 bg-accent" />
             <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-start gap-4">
@@ -115,16 +115,16 @@ export function DashboardClient(): ReactElement {
                   <HeartHandshake className="h-7 w-7 text-accent" />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <h1 className="text-xl font-bold text-foreground sm:text-2xl">
+                  <h1 className="text-2xl font-bold text-foreground sm:text-3xl">
                     لوحة الفرص التطوعية
                   </h1>
-                  <p className="max-w-lg text-sm leading-relaxed text-text-secondary">
+                  <p className="max-w-lg text-base leading-relaxed text-text-secondary">
                     استعرض فرص التطوع المتاحة بسهولة، وابحث بسرعة، ثم صف النتائج حسب المجال
                     والموقع والمهارات.
                   </p>
                 </div>
               </div>
-              <OpportunityRequestForm />
+              <OpportunityRequestForm variant="hero" />
             </div>
           </div>
 

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { ReactElement } from "react";
 import { useForm } from "react-hook-form";
+import { cn } from "@/lib/utils";
 
 import { useSignup } from "@/features/auth/hooks";
 import { SignupInputSchema, type SignupInput } from "@/features/auth/schemas";
@@ -27,6 +28,9 @@ export function RegisterForm(): ReactElement {
       role: "student",
     },
   });
+
+  const inputBase =
+    "h-12 rounded-xl px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20";
 
   const onSubmit = async (values: SignupInput): Promise<void> => {
     await signupMutation.mutateAsync(values);
@@ -58,10 +62,16 @@ export function RegisterForm(): ReactElement {
           type="text"
           autoComplete="name"
           placeholder="أدخل اسمك الكامل"
-          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          className={cn(inputBase, errors.name ? "border-red-600 bg-red-50" : "border-border-soft bg-white")}
+          aria-invalid={!!errors.name}
+          aria-describedby={errors.name ? "name-error" : undefined}
           {...register("name")}
         />
-        {errors.name ? <p className="text-sm text-red-600">{errors.name.message}</p> : null}
+        {errors.name ? (
+          <p id="name-error" role="alert" className="text-sm text-red-600">
+            {errors.name.message}
+          </p>
+        ) : null}
       </div>
 
       <div className="grid gap-2">
@@ -73,11 +83,15 @@ export function RegisterForm(): ReactElement {
           type="email"
           autoComplete="email"
           placeholder="name@example.com"
-          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          className={cn(inputBase, errors.email ? "border-red-600 bg-red-50" : "border-border-soft bg-white")}
+          aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? "email-error" : undefined}
           {...register("email")}
         />
         {errors.email ? (
-          <p className="text-sm text-red-600">{errors.email.message}</p>
+          <p id="email-error" role="alert" className="text-sm text-red-600">
+            {errors.email.message}
+          </p>
         ) : null}
       </div>
 
@@ -90,11 +104,15 @@ export function RegisterForm(): ReactElement {
           type="password"
           autoComplete="new-password"
           placeholder="6 أحرف على الأقل"
-          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          className={cn(inputBase, errors.password ? "border-red-600 bg-red-50" : "border-border-soft bg-white")}
+          aria-invalid={!!errors.password}
+          aria-describedby={errors.password ? "password-error" : undefined}
           {...register("password")}
         />
         {errors.password ? (
-          <p className="text-sm text-red-600">{errors.password.message}</p>
+          <p id="password-error" role="alert" className="text-sm text-red-600">
+            {errors.password.message}
+          </p>
         ) : null}
       </div>
 
@@ -104,7 +122,7 @@ export function RegisterForm(): ReactElement {
         </label>
         <select
           id="role"
-          className="h-12 rounded-xl border border-border-soft bg-white px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+          className={cn(inputBase, "border-border-soft bg-white")}
           {...register("role")}
         >
           <option value="student">متطوع</option>
@@ -113,7 +131,9 @@ export function RegisterForm(): ReactElement {
       </div>
 
       {globalError ? (
-        <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{globalError}</p>
+        <div role="alert" aria-live="assertive">
+          <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{globalError}</p>
+        </div>
       ) : null}
 
       <button

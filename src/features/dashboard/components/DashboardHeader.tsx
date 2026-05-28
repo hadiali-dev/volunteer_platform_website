@@ -28,6 +28,7 @@ export function DashboardHeader({
   unreadNotificationsCount,
 }: DashboardHeaderProps): ReactElement {
   const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
     if (typeof window === "undefined") {
       return "light";
@@ -47,19 +48,24 @@ export function DashboardHeader({
     window.localStorage.setItem("volunteer-theme", themeMode);
   }, [themeMode]);
 
+  useEffect(() => {
+    // close mobile menu on route change
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
   const toggleTheme = (): void => {
     setThemeMode((current) => (current === "light" ? "dark" : "light"));
   };
 
   return (
-    <header className="sticky top-0 z-20 border-b border-border-soft bg-surface px-6 py-4 sm:px-10 lg:px-12">
+    <header className="sticky top-0 z-30 border-b border-border-soft bg-surface/95 backdrop-blur-sm px-6 py-3 sm:px-10 lg:px-12">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4">
         <div className="flex flex-col gap-0.5">
           <p className="text-lg font-bold text-foreground">فولنتير</p>
           <p className="text-sm text-text-secondary">منصة فرص تطوعية عربية</p>
         </div>
 
-        <nav className="flex items-center gap-2">
+        <nav className="hidden md:flex items-center gap-2" aria-label="التنقل الرئيسي">
           {navigationItems.map((item) => {
             const isActive = pathname === item.href;
             return (
@@ -68,7 +74,7 @@ export function DashboardHeader({
                 href={item.href}
                 prefetch
                 className={cn(
-                  "inline-flex h-10 items-center rounded-lg px-4 text-sm font-semibold transition-colors",
+                  "inline-flex h-12 items-center rounded-lg px-4 text-sm font-semibold transition-colors",
                   isActive
                     ? "bg-accent text-white"
                     : "text-foreground hover:bg-accent-soft hover:text-accent",
@@ -81,6 +87,18 @@ export function DashboardHeader({
         </nav>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen((v) => !v)}
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md text-foreground transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+            aria-expanded={isMobileMenuOpen}
+            aria-label="قائمة التنقل"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 7H20M4 12H20M4 17H20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </button>
+
           <button
             type="button"
             onClick={toggleTheme}
@@ -153,6 +171,32 @@ export function DashboardHeader({
           </Link>
         </div>
       </div>
+
+      {isMobileMenuOpen ? (
+        <div className="md:hidden border-t border-border-soft bg-surface/95 backdrop-blur-sm">
+          <div className="mx-auto max-w-7xl px-4 py-3">
+            <nav className="flex flex-col gap-2" aria-label="قائمة الهاتف">
+              {navigationItems.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    prefetch
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={cn(
+                      "block w-full rounded-md px-4 py-3 text-sm font-semibold transition-colors",
+                      isActive ? "bg-accent text-white" : "text-foreground hover:bg-accent-soft hover:text-accent",
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 }

@@ -1,6 +1,8 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactElement } from "react";
+import { useState } from "react";
 
 import type { Opportunity, OpportunityCategory } from "@/features/dashboard/schemas";
 import { formatDate } from "@/lib/utils";
@@ -46,6 +48,8 @@ const resolveImageSrc = (
 };
 
 export function OpportunityCard({ opportunity }: OpportunityCardProps): ReactElement {
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <article className="group overflow-hidden rounded-xl border border-border-soft bg-surface shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-shadow hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
       <div className="relative h-44 overflow-hidden">
@@ -53,12 +57,29 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps): ReactEle
           src={resolveImageSrc(opportunity.image, opportunity._id)}
           alt={`صورة لفرصة ${opportunity.title}`}
           fill
-          unoptimized
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          loading="lazy"
+          onLoadingComplete={() => setImgLoaded(true)}
           className="object-cover transition duration-500 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+
+        {/* skeleton / placeholder while image loads */}
+        <div
+          aria-hidden
+          className={`absolute inset-0 flex items-center justify-center bg-surface transition-opacity ${
+            imgLoaded ? "opacity-0 pointer-events-none" : "opacity-100"
+          }`}
+        >
+          <div className="absolute inset-0 animate-pulse bg-gradient-to-b from-gray-100 to-gray-50 dark:from-slate-800 dark:to-slate-700" />
+          <svg className="relative h-8 w-8 text-emerald-300 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeOpacity="0.2" />
+            <path d="M22 12a10 10 0 10-10 10" stroke="currentColor" strokeWidth="3" />
+          </svg>
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         <div className="absolute bottom-3 right-3 flex items-center gap-2">
-          <span className="inline-flex rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white">
+          <span className="inline-flex rounded-full bg-accent px-3 py-1 text-xs font-semibold text-white/95">
             {CATEGORY_LABELS[opportunity.category]}
           </span>
         </div>

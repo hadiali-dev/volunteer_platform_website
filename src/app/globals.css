@@ -1,18 +1,20 @@
 @import "tailwindcss";
 
 :root {
+  /* Improved tokens: stronger contrast and clearer focus states */
   --background: #f8f9fa;
-  --foreground: #212529;
+  --foreground: #0f1720;
   --surface: #ffffff;
   --surface-strong: #ffffff;
-  --accent: #18a366;
-  --accent-strong: #128a54;
+  --accent: #13825a;
+  --accent-strong: #0f6a48;
   --accent-secondary: #4dd19a;
-  --text-secondary: #6c757d;
-  --accent-soft: rgba(24, 163, 102, 0.12);
+  --text-secondary: #495057;
+  --accent-soft: rgba(19, 130, 90, 0.12);
   --accent-secondary-soft: rgba(77, 209, 154, 0.12);
-  --border-soft: #dee2e6;
-  --border-focus: #18a366;
+  --border-soft: #e7ecf0;
+  --border-focus: #0f8452;
+  --focus-ring-color: rgba(19, 130, 90, 0.12);
 }
 
 [data-theme="dark"] {
@@ -20,14 +22,15 @@
   --foreground: #eef2f7;
   --surface: #11151d;
   --surface-strong: #161b24;
-  --accent: #33b47f;
-  --accent-strong: #2b9d6e;
+  --accent: #2fb57a;
+  --accent-strong: #228c61;
   --accent-secondary: #7dd8a7;
   --text-secondary: #a8b0bb;
-  --accent-soft: rgba(51, 180, 127, 0.2);
+  --accent-soft: rgba(47, 181, 122, 0.18);
   --accent-secondary-soft: rgba(125, 216, 167, 0.18);
   --border-soft: #2a3140;
-  --border-focus: #33b47f;
+  --border-focus: #2fb57a;
+  --focus-ring-color: rgba(47, 181, 122, 0.12);
 }
 
 /* Dark-mode compatibility for legacy hardcoded Tailwind color classes. */
@@ -128,6 +131,13 @@ body {
   transition:
     background-color 200ms ease,
     color 200ms ease;
+}
+
+/* Accessible focus visuals for keyboard users */
+:where(button, input, select, textarea, a):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--focus-ring-color);
+  border-color: var(--border-focus);
 }
 
 ::selection {
