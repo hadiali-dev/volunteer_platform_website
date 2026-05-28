@@ -5,7 +5,6 @@ import type { ReactElement } from "react";
 import { useDeferredValue, useMemo, useState } from "react";
 
 import { AnnouncementBanner } from "@/features/dashboard/components/AnnouncementBanner";
-import { AdBanner } from "@/features/dashboard/components/AdBanner";
 import { DashboardHeader } from "@/features/dashboard/components/DashboardHeader";
 import { OpportunityFilters } from "@/features/dashboard/components/OpportunityFilters";
 import { OpportunityList } from "@/features/dashboard/components/OpportunityList";
@@ -130,7 +129,10 @@ export function DashboardClient(): ReactElement {
           </div>
 
           <div className="mt-3">
-            <AdBanner />
+            <AnnouncementBanner
+              announcement={activeAnnouncementQuery.data ?? null}
+              isLoading={activeAnnouncementQuery.isPending}
+            />
           </div>
 
           <div className="relative -mt-10 z-30">
