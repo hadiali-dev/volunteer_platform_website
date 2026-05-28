@@ -5,6 +5,7 @@ import type { ReactElement } from "react";
 import { useDeferredValue, useMemo, useState } from "react";
 
 import { AnnouncementBanner } from "@/features/dashboard/components/AnnouncementBanner";
+import { AdBanner } from "@/features/dashboard/components/AdBanner";
 import { DashboardHeader } from "@/features/dashboard/components/DashboardHeader";
 import { OpportunityFilters } from "@/features/dashboard/components/OpportunityFilters";
 import { OpportunityList } from "@/features/dashboard/components/OpportunityList";
@@ -128,14 +129,11 @@ export function DashboardClient(): ReactElement {
             </div>
           </div>
 
-          <div>
-            <AnnouncementBanner
-              announcement={activeAnnouncementQuery.data ?? null}
-              isLoading={activeAnnouncementQuery.isPending}
-            />
+          <div className="mt-3">
+            <AdBanner />
           </div>
 
-          <div>
+          <div className="relative -mt-10 z-30">
             <OpportunityFilters
               search={search}
               category={category}
@@ -146,18 +144,16 @@ export function DashboardClient(): ReactElement {
               onCategoryChange={handleCategoryChange}
               onLocationChange={setLocation}
               onSkillChange={setSkill}
+              matchActive={filterByProfileSkills}
+              onMatchToggle={() => setFilterByProfileSkills((c) => !c)}
+              onClearFilters={() => {
+                setSearch("");
+                setCategory("all");
+                setLocation("");
+                setSkill("");
+                setFilterByProfileSkills(false);
+              }}
             />
-          </div>
-
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={() => setFilterByProfileSkills((current) => !current)}
-              disabled={profileQuery.isPending || userSkills.length === 0}
-              className="inline-flex h-10 items-center rounded-lg border px-4 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-55 border-emerald-200 bg-emerald-50 text-emerald-700 hover:border-accent hover:text-accent"
-            >
-              {filterByProfileSkills ? "إظهار كل الفرص" : "مطابقة مهاراتي"}
-            </button>
           </div>
 
           {opportunitiesQuery.isError ? (

@@ -51,7 +51,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps): ReactEle
   const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
-    <article className="group overflow-hidden rounded-xl border border-border-soft bg-surface shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-shadow hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]">
+    <article className="group overflow-hidden rounded-xl card-border shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-shadow hover:shadow-[0_6px_20px_rgba(15,130,90,0.06)]">
       <div className="relative h-44 overflow-hidden">
         <Image
           src={resolveImageSrc(opportunity.image, opportunity._id)}

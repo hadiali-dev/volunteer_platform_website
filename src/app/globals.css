@@ -191,6 +191,31 @@ body {
   }
 }
 
+/* Utilities: card border and input surface helpers */
+.card-border {
+  border: 1px solid color-mix(in srgb, var(--border-soft) 72%, var(--accent) 10%);
+  background: var(--surface);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent), transparent 96%);
+  transition: box-shadow 180ms ease, border-color 180ms ease;
+}
+.card-border:hover {
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--accent), transparent 92%);
+  border-color: color-mix(in srgb, var(--border-soft) 40%, var(--accent) 20%);
+}
+
+.input-surface {
+  background: color-mix(in srgb, var(--surface) 92%, var(--accent-soft) 8%);
+  border: 1px solid color-mix(in srgb, var(--border-soft) 72%, var(--accent) 6%);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: box-shadow 150ms ease, border-color 150ms ease;
+}
+.input-surface:focus {
+  box-shadow: 0 0 0 4px var(--focus-ring-color);
+  border-color: var(--border-focus);
+  outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

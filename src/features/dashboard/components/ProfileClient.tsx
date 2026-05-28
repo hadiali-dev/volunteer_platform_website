@@ -118,178 +118,143 @@ export function ProfileClient(): ReactElement {
       <DashboardHeader unreadNotificationsCount={unreadNotificationsCount} />
 
       <main className="mx-auto w-full max-w-7xl px-6 py-8 sm:px-10 lg:px-12">
-        <section className="grid grid-cols-12 gap-8">
-          <div className="col-span-12 grid gap-3">
-            <h1 className="text-3xl font-bold leading-tight text-foreground sm:text-4xl">
-              الملف الشخصي
-            </h1>
-            <p className="text-base leading-8 text-text-secondary">
-              عدّل بياناتك، مهاراتك واهتماماتك ليتم ترشيح فرص تطوعية مناسبة لك.
-            </p>
+        <header className="mb-6">
+          <h1 className="text-4xl font-extrabold leading-tight text-foreground">الملف الشخصي</h1>
+          <p className="mt-2 text-gray-500">عدّل بياناتك، مهاراتك واهتماماتك ليتم ترشيح فرص تطوعية مناسبة لك.</p>
+        </header>
+
+        {profileQuery.isError ? (
+          <div className="rounded-2xl p-6 text-sm text-red-700 shadow-sm bg-red-50">
+            تعذر جلب بيانات الملف الشخصي من الخادم.
           </div>
+        ) : null}
 
-          {profileQuery.isError ? (
-            <div className="col-span-12 rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 shadow-[0_8px_20px_rgba(220,38,38,0.08)]">
-              تعذر جلب بيانات الملف الشخصي من الخادم.
-            </div>
-          ) : null}
+        {profileQuery.isPending ? (
+          <div className="rounded-2xl p-8 text-center text-sm text-text-secondary shadow-sm bg-surface">
+            جارٍ تحميل الملف الشخصي...
+          </div>
+        ) : null}
 
-          {profileQuery.isPending ? (
-            <div className="col-span-12 rounded-2xl border border-border-soft bg-surface p-8 text-center text-sm text-text-secondary shadow-[0_6px_18px_rgba(33,37,41,0.08)]">
-              جارٍ تحميل الملف الشخصي...
-            </div>
-          ) : null}
+        {profileQuery.data ? (
+          <div className="flex flex-col gap-8 lg:flex-row-reverse lg:items-start lg:gap-8">
+            {/* Profile Summary (right column on desktop) */}
+            <aside className="w-full lg:w-1/3">
+              <div className="rounded-2xl bg-white p-6 shadow-sm">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="h-28 w-28 rounded-full bg-emerald-50 flex items-center justify-center text-3xl font-bold text-foreground overflow-hidden">
+                    {profileImageSrc && !isAvatarFailed ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={profileImageSrc}
+                        alt={`الصورة الشخصية لـ ${profileQuery.data.user.name}`}
+                        className="h-full w-full object-cover"
+                        onError={() => setFailedAvatarSrc(profileImageSrc)}
+                      />
+                    ) : (
+                      <span className="text-3xl">{profileInitial}</span>
+                    )}
+                  </div>
 
-          {profileQuery.data ? (
-            <>
-              <section className="col-span-12 rounded-2xl border border-border-soft bg-surface p-6 shadow-[0_6px_18px_rgba(33,37,41,0.08)] lg:col-span-4">
-                <div className="grid gap-4">
-                  <div className="flex items-center gap-3">
-                    <div className="mt-1 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-accent-soft text-lg font-bold text-emerald-800">
-                      {profileImageSrc && !isAvatarFailed ? (
-                        // Allow user-provided avatar URLs without Next.js domain allowlist constraints.
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={profileImageSrc}
-                          alt={`الصورة الشخصية لـ ${profileQuery.data.user.name}`}
-                          className="h-full w-full object-cover"
-                          onError={() => setFailedAvatarSrc(profileImageSrc)}
-                        />
-                      ) : (
-                        profileInitial
-                      )}
+                  <div className="text-center">
+                    <p className="text-lg font-bold text-foreground">{profileQuery.data.user.name}</p>
+                    <p className="mt-1 text-sm text-gray-500">{profileQuery.data.user.email}</p>
+                  </div>
+
+                  <div className="w-full flex gap-3 mt-4">
+                    <div className="flex-1 rounded-lg bg-gray-50 p-3 text-center">
+                      <p className="text-xs text-text-secondary">تاريخ الانضمام</p>
+                      <p className="mt-1 text-base font-semibold text-foreground">{formatDate(profileQuery.data.joinedAt)}</p>
                     </div>
-                    <div className="grid gap-0.5">
-                      <p className="text-lg font-semibold text-foreground">
-                        {profileQuery.data.user.name}
-                      </p>
-                      <p className="text-sm text-text-secondary">
-                        {profileQuery.data.user.email}
-                      </p>
+                    <div className="flex-1 rounded-lg bg-gray-50 p-3 text-center">
+                      <p className="text-xs text-text-secondary">ساعات التطوع</p>
+                      <p className="mt-1 text-base font-semibold text-foreground">{profileQuery.data.totalHours}</p>
                     </div>
                   </div>
 
-                  <div className="grid gap-2 text-sm">
-                    <p className="text-text-secondary">
-                      تاريخ الانضمام:{" "}
-                      <span className="font-semibold text-foreground">
-                        {formatDate(profileQuery.data.joinedAt)}
-                      </span>
-                    </p>
-                    <p className="text-text-secondary">
-                      ساعات التطوع:{" "}
-                      <span className="font-semibold text-foreground">
-                        {profileQuery.data.totalHours}
-                      </span>
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-3 gap-2">
-                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-center">
-                      <p className="mt-1 text-lg font-bold text-emerald-800">
-                        {profileQuery.data.completedOpportunities}
-                      </p>
+                  <div className="grid grid-cols-3 gap-3 w-full mt-4">
+                    <div className="rounded-lg bg-emerald-50 p-3 text-center">
+                      <p className="text-lg font-bold text-emerald-700">{profileQuery.data.completedOpportunities}</p>
                       <p className="text-xs text-text-secondary">مقبول</p>
                     </div>
-                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-center">
-                      <p className="mt-1 text-lg font-bold text-emerald-800">
-                        {profileQuery.data.pendingApplications}
-                      </p>
+                    <div className="rounded-lg bg-gray-50 p-3 text-center">
+                      <p className="text-lg font-bold text-foreground">{profileQuery.data.pendingApplications}</p>
                       <p className="text-xs text-text-secondary">قيد المراجعة</p>
                     </div>
-                    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-center">
-                      <p className="mt-1 text-lg font-bold text-emerald-800">
-                        {profileQuery.data.cancelledApplications}
-                      </p>
+                    <div className="rounded-lg bg-red-50 p-3 text-center">
+                      <p className="text-lg font-bold text-red-600">{profileQuery.data.cancelledApplications}</p>
                       <p className="text-xs text-text-secondary">مرفوض</p>
                     </div>
                   </div>
                 </div>
-              </section>
+              </div>
+            </aside>
 
-              <section className="col-span-12 rounded-2xl border border-border-soft bg-surface p-6 shadow-[0_6px_18px_rgba(33,37,41,0.08)] lg:col-span-8">
-                <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+            {/* Edit Form (left column on desktop) */}
+            <div className="w-full lg:w-2/3">
+              <div className="rounded-2xl bg-white p-8 shadow-sm">
+                <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
                   <div className="grid gap-2">
-                    <label htmlFor="image" className="text-sm font-semibold text-foreground">
-                      رابط الصورة الشخصية
-                    </label>
+                    <label htmlFor="image" className="text-sm font-semibold text-foreground">رابط الصورة الشخصية</label>
                     <input
                       id="image"
                       placeholder="https://..."
-                      className="h-11 rounded-xl border border-border-soft bg-surface px-3 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+                      className="w-full rounded-lg bg-gray-50 border border-transparent p-3 text-sm text-foreground placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
                       {...register("image")}
                     />
-                    {errors.image ? (
-                      <p className="text-sm text-red-600">{errors.image.message}</p>
-                    ) : null}
+                    {errors.image ? <p className="text-sm text-red-600">{errors.image.message}</p> : null}
                   </div>
 
                   <div className="grid gap-2">
-                    <label htmlFor="bio" className="text-sm font-semibold text-foreground">
-                      نبذة عنك
-                    </label>
+                    <label htmlFor="bio" className="text-sm font-semibold text-foreground">نبذة عنك</label>
                     <textarea
                       id="bio"
                       rows={4}
-                      className="rounded-xl border border-border-soft bg-surface px-3 py-2 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+                      className="w-full rounded-lg bg-gray-50 border border-transparent p-3 text-sm text-foreground placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
                       {...register("bio")}
                     />
-                    {errors.bio ? (
-                      <p className="text-sm text-red-600">{errors.bio.message}</p>
-                    ) : null}
+                    {errors.bio ? <p className="text-sm text-red-600">{errors.bio.message}</p> : null}
                   </div>
 
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="grid gap-2">
-                      <label htmlFor="skillsText" className="text-sm font-semibold text-foreground">
-                        المهارات (مفصولة بفاصلة)
-                      </label>
+                      <label htmlFor="skillsText" className="text-sm font-semibold text-foreground">المهارات (مفصولة بفاصلة)</label>
                       <input
                         id="skillsText"
                         placeholder="إدارة فريق، تنظيم، تواصل"
-                        className="h-11 rounded-xl border border-border-soft bg-surface px-3 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+                        className="w-full rounded-lg bg-gray-50 border border-transparent p-3 text-sm text-foreground placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
                         {...register("skillsText")}
                       />
                     </div>
 
                     <div className="grid gap-2">
-                      <label
-                        htmlFor="interestsText"
-                        className="text-sm font-semibold text-foreground"
-                      >
-                        الاهتمامات (مفصولة بفاصلة)
-                      </label>
+                      <label htmlFor="interestsText" className="text-sm font-semibold text-foreground">الاهتمامات (مفصولة بفاصلة)</label>
                       <input
                         id="interestsText"
                         placeholder="تعليم، صحة، بيئة"
-                        className="h-11 rounded-xl border border-border-soft bg-surface px-3 text-sm text-foreground outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20"
+                        className="w-full rounded-lg bg-gray-50 border border-transparent p-3 text-sm text-foreground placeholder:text-text-secondary focus:outline-none focus:ring-2 focus:ring-emerald-500 transition"
                         {...register("interestsText")}
                       />
                     </div>
                   </div>
 
                   {globalError ? (
-                    <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">
-                      {globalError}
-                    </p>
+                    <div role="alert" className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-700">{globalError}</div>
                   ) : null}
 
-                  <div className="flex items-center justify-end">
+                  <div className="flex justify-end">
                     <button
                       type="submit"
                       disabled={isSubmitting || updateProfileMutation.isPending}
-                      className="inline-flex h-11 items-center justify-center rounded-xl bg-[linear-gradient(135deg,#28a773,#1f875d)] px-5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(40,167,115,0.28)] transition hover:brightness-105 disabled:opacity-70"
+                      className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-3 text-sm font-bold text-white transform transition hover:-translate-y-1 hover:shadow-lg disabled:opacity-70"
                     >
-                      {isSubmitting || updateProfileMutation.isPending
-                        ? "جارٍ الحفظ..."
-                        : "حفظ التعديلات"}
+                      {isSubmitting || updateProfileMutation.isPending ? "جارٍ الحفظ..." : "حفظ التعديلات"}
                     </button>
                   </div>
                 </form>
-              </section>
-            </>
-          ) : null}
-        </section>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </main>
     </>
   );

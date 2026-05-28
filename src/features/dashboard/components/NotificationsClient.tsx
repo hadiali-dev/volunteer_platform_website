@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 import { DashboardHeader } from "@/features/dashboard/components/DashboardHeader";
 import { NotificationsList } from "@/features/dashboard/components/NotificationsList";
-import { useNotifications } from "@/features/dashboard/hooks";
+import { useNotifications, useMarkNotificationAsRead } from "@/features/dashboard/hooks";
 
 export function NotificationsClient(): ReactElement {
   const notificationsQuery = useNotifications();
@@ -15,34 +15,59 @@ export function NotificationsClient(): ReactElement {
     return list.filter((item) => !item.isRead).length;
   }, [notificationsQuery.data]);
 
+  const markAsReadMutation = useMarkNotificationAsRead();
+
+  const handleMarkAll = async () => {
+    const list = notificationsQuery.data ?? [];
+    const unreadIds = list.filter((n) => !n.isRead).map((n) => n._id);
+    if (unreadIds.length === 0) return;
+
+    try {
+      await Promise.all(unreadIds.map((id) => markAsReadMutation.mutateAsync(id)));
+    } catch (e) {
+      // best-effort: server errors will be surfaced by hooks/notifications query
+    }
+  };
+
   return (
     <>
       <DashboardHeader unreadNotificationsCount={unreadNotificationsCount} />
 
-      <main className="mx-auto w-full max-w-7xl px-6 py-8 sm:px-10 lg:px-12">
-        <section className="grid grid-cols-12 gap-8">
-          <div className="col-span-12 rounded-2xl border border-border-soft bg-surface p-6 shadow-[0_6px_18px_rgba(33,37,41,0.08)]">
-            <h1 className="text-3xl font-bold text-foreground sm:text-4xl">الإشعارات</h1>
-            <p className="mt-3 text-base leading-8 text-text-secondary">
+      <main dir="rtl" className="mx-auto w-full max-w-4xl px-6 py-8">
+        <header className="mb-6 grid grid-cols-3 items-center gap-4">
+          <div className="text-left">
+            <button
+              type="button"
+              onClick={handleMarkAll}
+              disabled={markAsReadMutation.isPending}
+              className="text-sm text-emerald-600 hover:underline disabled:opacity-60"
+            >
+              تحديد الكل كمقروء
+            </button>
+          </div>
+
+          <div className="col-span-2 text-right sm:text-center">
+            <h1 className="text-3xl font-bold text-gray-800">الإشعارات</h1>
+            <p className="mt-1 text-sm text-gray-500">
               راجع التحديثات الجديدة وعلّم الإشعارات كمقروءة عند الانتهاء.
             </p>
           </div>
+        </header>
 
+        <section>
           {notificationsQuery.isError ? (
-            <div className="col-span-12 rounded-2xl border border-red-200 bg-red-50 p-6 text-sm text-red-700 shadow-[0_8px_20px_rgba(220,38,38,0.08)]">
+            <div className="rounded-2xl p-6 text-sm text-red-700 shadow-sm bg-red-50">
               تعذر جلب الإشعارات من الخادم. حاول مرة أخرى.
             </div>
           ) : null}
 
-          <div className="col-span-12">
-            {notificationsQuery.isPending ? (
-              <div className="rounded-2xl border border-border-soft bg-surface p-8 text-center text-sm text-text-secondary shadow-[0_6px_18px_rgba(33,37,41,0.08)]">
-                جارٍ تحميل الإشعارات...
-              </div>
-            ) : (
-              <NotificationsList notifications={notificationsQuery.data ?? []} />
-            )}
-          </div>
+          {notificationsQuery.isPending ? (
+            <div className="rounded-2xl p-8 text-center text-sm text-text-secondary shadow-sm bg-surface">
+              جارٍ تحميل الإشعارات...
+            </div>
+          ) : (
+            <NotificationsList notifications={notificationsQuery.data ?? []} />
+          )}
         </section>
       </main>
     </>
