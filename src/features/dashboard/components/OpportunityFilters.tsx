@@ -57,7 +57,7 @@ export function OpportunityFilters({
 
   return (
     <div className="mx-auto w-full max-w-7xl px-6">
-      <div className="relative -mt-8">
+      <div className="relative -mt-4">
         <div className="rounded-2xl input-surface border border-border-soft p-3 shadow-md backdrop-blur-sm flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="flex-1 min-w-0">
             <label htmlFor="search" className="sr-only">
@@ -70,12 +70,11 @@ export function OpportunityFilters({
                 onChange={(event) => onSearchChange(event.target.value)}
                 placeholder="اكتب اسم الفرصة أو المجال أو الموقع"
                 className={
-                  "w-full rounded-md bg-transparent pr-10 text-sm text-foreground placeholder:text-text-secondary outline-none" +
-                  ""
+                  "w-full rounded-lg bg-white/60 h-12 pr-12 pl-4 text-base text-foreground placeholder:text-text-secondary outline-none border border-transparent focus:border-emerald-200 focus:ring-2 focus:ring-emerald-100 transition"
                 }
               />
               <svg
-                className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-text-secondary"
+                className="absolute right-3 top-1/2 -translate-y-1/2 h-5 w-5 text-text-secondary"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -88,46 +87,130 @@ export function OpportunityFilters({
           </div>
 
           <div className="flex shrink-0 items-center gap-2">
-            <select
-              id="category"
-              value={category}
-              onChange={(event) => onCategoryChange(event.target.value)}
-              className="input-surface appearance-none pr-8 text-sm"
-            >
-              <option value="all">كل التصنيفات</option>
-              <option value="educational">{CATEGORY_LABELS.educational}</option>
-              <option value="health">{CATEGORY_LABELS.health}</option>
-              <option value="environmental">{CATEGORY_LABELS.environmental}</option>
-              <option value="social">{CATEGORY_LABELS.social}</option>
-            </select>
+            {/* Category dropdown (hover) */}
+            <div className="relative group">
+              <button
+                type="button"
+                className="input-surface rounded-lg px-3 py-2 flex items-center gap-2 text-sm min-w-[10rem] justify-between"
+                aria-haspopup="listbox"
+              >
+                <span>{category === "all" ? "كل التصنيفات" : CATEGORY_LABELS[category]}</span>
+                <svg className="h-4 w-4 text-text-secondary" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M5 8l5 4 5-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
 
-            <select
-              id="location"
-              value={location}
-              onChange={(event) => onLocationChange(event.target.value)}
-              className="input-surface appearance-none pr-8 text-sm"
-            >
-              <option value="">كل المواقع</option>
-              {locationOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+              <ul
+                role="listbox"
+                className="absolute z-50 right-0 mt-2 w-48 rounded-md bg-white border border-gray-100 shadow-lg py-1 hidden group-hover:block"
+              >
+                <li
+                  role="option"
+                  tabIndex={0}
+                  onClick={() => onCategoryChange("all")}
+                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                >
+                  <span>كل التصنيفات</span>
+                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                </li>
+                <li
+                  role="option"
+                  tabIndex={0}
+                  onClick={() => onCategoryChange("educational")}
+                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                >
+                  <span>{CATEGORY_LABELS.educational}</span>
+                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                </li>
+                <li
+                  role="option"
+                  tabIndex={0}
+                  onClick={() => onCategoryChange("health")}
+                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                >
+                  <span>{CATEGORY_LABELS.health}</span>
+                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                </li>
+                <li
+                  role="option"
+                  tabIndex={0}
+                  onClick={() => onCategoryChange("environmental")}
+                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                >
+                  <span>{CATEGORY_LABELS.environmental}</span>
+                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                </li>
+                <li
+                  role="option"
+                  tabIndex={0}
+                  onClick={() => onCategoryChange("social")}
+                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                >
+                  <span>{CATEGORY_LABELS.social}</span>
+                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                </li>
+              </ul>
+            </div>
 
-            <select
-              id="skill"
-              value={skill}
-              onChange={(event) => onSkillChange(event.target.value)}
-              className="input-surface appearance-none pr-8 text-sm"
-            >
-              <option value="">كل المهارات</option>
-              {skillOptions.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+            {/* Location dropdown (hover) */}
+            <div className="relative group">
+              <button
+                type="button"
+                className="input-surface rounded-lg px-3 py-2 flex items-center gap-2 text-sm min-w-[10rem] justify-between"
+                aria-haspopup="listbox"
+              >
+                <span>{location.length === 0 ? "كل المواقع" : location}</span>
+                <svg className="h-4 w-4 text-text-secondary" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M5 8l5 4 5-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+
+              <ul role="listbox" className="absolute z-50 right-0 mt-2 w-56 rounded-md bg-white border border-gray-100 shadow-lg py-1 hidden group-hover:block max-h-60 overflow-auto">
+                <li className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between" onClick={() => onLocationChange("")}>كل المواقع <span className="opacity-0 hover:opacity-100 text-gray-400">›</span></li>
+                {locationOptions.map((option) => (
+                  <li
+                    key={option}
+                    className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                    onClick={() => onLocationChange(option)}
+                    role="option"
+                    tabIndex={0}
+                  >
+                    <span className="truncate">{option}</span>
+                    <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Skill dropdown (hover) */}
+            <div className="relative group">
+              <button
+                type="button"
+                className="input-surface rounded-lg px-3 py-2 flex items-center gap-2 text-sm min-w-[10rem] justify-between"
+                aria-haspopup="listbox"
+              >
+                <span>{skill.length === 0 ? "كل المهارات" : skill}</span>
+                <svg className="h-4 w-4 text-text-secondary" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                  <path d="M5 8l5 4 5-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+
+              <ul role="listbox" className="absolute z-50 right-0 mt-2 w-56 rounded-md bg-white border border-gray-100 shadow-lg py-1 hidden group-hover:block max-h-60 overflow-auto">
+                <li className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between" onClick={() => onSkillChange("")}>كل المهارات <span className="opacity-0 hover:opacity-100 text-gray-400">›</span></li>
+                {skillOptions.map((option) => (
+                  <li
+                    key={option}
+                    className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                    onClick={() => onSkillChange(option)}
+                    role="option"
+                    tabIndex={0}
+                  >
+                    <span className="truncate">{option}</span>
+                    <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             <button
               type="button"
