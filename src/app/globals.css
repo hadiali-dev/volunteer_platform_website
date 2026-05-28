@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  /* Improved tokens: stronger contrast and clearer focus states */
-  --background: #f8f9fa;
+  /* Soft green-tinted palette to reduce stark white surfaces */
+  --background: #f0fbf5;
   --foreground: #0f1720;
-  --surface: #ffffff;
+  --surface: #f7fbf8;
   --surface-strong: #ffffff;
   --accent: #13825a;
   --accent-strong: #0f6a48;
   --accent-secondary: #4dd19a;
   --text-secondary: #495057;
-  --accent-soft: rgba(19, 130, 90, 0.12);
-  --accent-secondary-soft: rgba(77, 209, 154, 0.12);
+  --accent-soft: rgba(19, 130, 90, 0.16);
+  --accent-secondary-soft: rgba(77, 209, 154, 0.16);
   --border-soft: #e7ecf0;
   --border-focus: #0f8452;
   --focus-ring-color: rgba(19, 130, 90, 0.12);
