@@ -78,8 +78,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       credentials: {
         email: { label: "البريد الإلكتروني", type: "email" },
         password: { label: "كلمة المرور", type: "password" },
+        autoLoginToken: { type: "text" },
+        autoLoginUser: { type: "text" },
       },
       authorize: async (credentials) => {
+        // Handle auto-login from signup response to bypass race conditions
+        if (credentials?.autoLoginToken && credentials?.autoLoginUser) {
+          try {
+            const user = JSON.parse(credentials.autoLoginUser as string);
+            return {
+              id: user._id,
+              name: user.name,
+              email: user.email,
+              role: user.role,
+              image: user.image,
+              active: user.active,
+              accessToken: credentials.autoLoginToken as string,
+            };
+          } catch (e) {
+            console.error("Auto-login parsing failed:", e);
+          }
+        }
+
         const parsed = LoginInputSchema.safeParse(credentials);
         if (!parsed.success) {
           throw new InvalidCredentialsError();
@@ -97,22 +117,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             accessToken: result.token,
           };
         } catch (error) {
-          if (error instanceof AppError) {
-            if (error.statusCode === 400 || error.statusCode === 401) {
-              throw new InvalidCredentialsError();
-            }
-            if (error.statusCode === 429) {
-              throw new Error("RATE_LIMIT");
-            }
+          const isAppError = error instanceof AppError || (error as any)?.name === "AppError";
+          const statusCode = isAppError ? (error as any).statusCode : (error as AxiosError)?.response?.status;
+
+          if (statusCode === 400 || statusCode === 401) {
+            throw new InvalidCredentialsError();
           }
-          if (error instanceof AxiosError) {
-            const statusCode = error.response?.status;
-            if (statusCode === 400 || statusCode === 401) {
-              throw new InvalidCredentialsError();
-            }
-            if (statusCode === 429) {
-              throw new Error("RATE_LIMIT");
-            }
+          if (statusCode === 429) {
+            throw new Error("RATE_LIMIT");
           }
 
           console.error("Auth authorize error:", getAuthErrorMessage(error));

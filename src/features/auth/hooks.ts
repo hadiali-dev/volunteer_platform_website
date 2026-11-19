@@ -89,11 +89,13 @@ export const useSignup = (): UseMutationResult<
         throw new AppError("حدث خطأ أثناء إنشاء الحساب.", 500);
       }
 
-      // Manual login by calling the provider directly instead of re-verifying credentials
-      // This bypasses the authorize() race condition entirely
+      // Manual login by calling the provider with the token we already have.
+      // This bypasses the authorize() backend request entirely for auto-login.
       const result = await signIn("credentials", {
         email: parsedPayload.email,
         password: parsedPayload.password,
+        autoLoginToken: signupResponse.token,
+        autoLoginUser: JSON.stringify(signupResponse.data.user),
         redirect: false,
       });
 
