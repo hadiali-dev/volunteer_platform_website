@@ -9,6 +9,7 @@ import {
   RoleSchema,
 } from "@/features/auth/schemas";
 import { env } from "@/lib/env";
+import { AppError } from "@/types";
 
 const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
 
@@ -96,6 +97,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             accessToken: result.token,
           };
         } catch (error) {
+          if (error instanceof AppError) {
+            if (error.statusCode === 400 || error.statusCode === 401) {
+              throw new InvalidCredentialsError();
+            }
+          }
           if (error instanceof AxiosError) {
             const statusCode = error.response?.status;
             if (statusCode === 400 || statusCode === 401) {

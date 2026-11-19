@@ -77,6 +77,9 @@ export const useSignup = (): UseMutationResult<
       const parsedPayload = SignupInputSchema.parse(payload);
       await signupUser(parsedPayload);
 
+      // Add a small delay to prevent race conditions between DB write and login read
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       return loginWithCredentials(parsedPayload.email, parsedPayload.password);
     },
   });
