@@ -101,11 +101,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             if (error.statusCode === 400 || error.statusCode === 401) {
               throw new InvalidCredentialsError();
             }
+            if (error.statusCode === 429) {
+              throw new Error("RATE_LIMIT");
+            }
           }
           if (error instanceof AxiosError) {
             const statusCode = error.response?.status;
             if (statusCode === 400 || statusCode === 401) {
               throw new InvalidCredentialsError();
+            }
+            if (statusCode === 429) {
+              throw new Error("RATE_LIMIT");
             }
           }
 

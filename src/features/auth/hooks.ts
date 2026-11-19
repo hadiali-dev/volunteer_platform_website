@@ -18,8 +18,12 @@ interface CredentialsSignInResult {
 }
 
 const getLoginErrorMessage = (errorCode: string): string => {
-  if (errorCode === "CredentialsSignin") {
+  if (errorCode === "CredentialsSignin" || errorCode === "invalid_credentials") {
     return "بيانات تسجيل الدخول غير صحيحة.";
+  }
+
+  if (errorCode === "RATE_LIMIT" || errorCode.includes("rate_limit")) {
+    return "محاولات كثيرة جداً. يرجى المحاولة لاحقاً.";
   }
 
   if (errorCode === "Configuration") {
@@ -44,7 +48,9 @@ const loginWithCredentials = async (
   }
 
   if (result.error) {
-    const statusCode = result.error === "Configuration" ? 500 : 401;
+    console.error("Login error code:", result.error);
+    const statusCode =
+      result.error === "Configuration" ? 500 : result.error.includes("rate") ? 429 : 401;
     throw new AppError(getLoginErrorMessage(result.error), statusCode);
   }
 
@@ -77,8 +83,8 @@ export const useSignup = (): UseMutationResult<
       const parsedPayload = SignupInputSchema.parse(payload);
       await signupUser(parsedPayload);
 
-      // Add a small delay to prevent race conditions between DB write and login read
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      // Increase delay to 1000ms to be safer against race conditions
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       return loginWithCredentials(parsedPayload.email, parsedPayload.password);
     },

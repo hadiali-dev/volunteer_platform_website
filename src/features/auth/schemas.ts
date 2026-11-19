@@ -6,6 +6,7 @@ export const LoginInputSchema = z.object({
   email: z
     .string()
     .trim()
+    .toLowerCase()
     .email("البريد الإلكتروني غير صالح."),
   password: z
     .string()
@@ -20,6 +21,7 @@ export const SignupInputSchema = z.object({
   email: z
     .string()
     .trim()
+    .toLowerCase()
     .email("البريد الإلكتروني غير صالح."),
   password: z
     .string()
