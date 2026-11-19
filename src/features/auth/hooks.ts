@@ -2,6 +2,7 @@
 
 import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { signupUser } from "@/features/auth/api";
 import {
@@ -78,15 +79,45 @@ export const useSignup = (): UseMutationResult<
   Error,
   SignupInput
 > => {
+  const router = useRouter();
   return useMutation({
     mutationFn: async (payload) => {
       const parsedPayload = SignupInputSchema.parse(payload);
-      await signupUser(parsedPayload);
+      const signupResponse = await signupUser(parsedPayload);
 
-      // Increase delay to 1000ms to be safer against race conditions
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!signupResponse.token) {
+        throw new AppError("حدث خطأ أثناء إنشاء الحساب.", 500);
+      }
 
-      return loginWithCredentials(parsedPayload.email, parsedPayload.password);
+      // Manual login by calling the provider directly instead of re-verifying credentials
+      // This bypasses the authorize() race condition entirely
+      const result = await signIn("credentials", {
+        email: parsedPayload.email,
+        password: parsedPayload.password,
+        redirect: false,
+      });
+
+      if (!result) {
+        throw new AppError("تعذر تسجيل الدخول التلقائي. يرجى تسجيل الدخول يدوياً.", 500);
+      }
+
+      if (result.error) {
+        console.error("Auto-login error:", result.error);
+        // If auto-login fails, we don't throw, we just redirect to login
+        // since the account IS created (201).
+        router.push("/login");
+        return {
+          ok: false,
+          status: 401,
+          url: "/login",
+        };
+      }
+
+      return {
+        ok: result.ok,
+        status: result.status,
+        url: result.url,
+      };
     },
   });
 };

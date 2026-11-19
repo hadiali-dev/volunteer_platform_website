@@ -33,7 +33,11 @@ export function RegisterForm(): ReactElement {
     "h-12 rounded-xl px-3 text-sm outline-none transition focus:border-accent focus:ring-2 focus:ring-accent/20";
 
   const onSubmit = async (values: SignupInput): Promise<void> => {
-    await signupMutation.mutateAsync(values);
+    const result = await signupMutation.mutateAsync(values);
+
+    // If auto-login failed but registration succeeded, the hook already handled the redirect
+    if (!result.ok) return;
+
     if (values.role === "student" || values.role === undefined) {
       router.replace("/profile/setup");
       router.refresh();
