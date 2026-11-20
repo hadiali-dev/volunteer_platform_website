@@ -56,7 +56,7 @@ export function LoginForm(): ReactElement {
           placeholder="name@example.com"
           className={cn(
             inputBase,
-            errors.email ? "border-red-600 bg-red-50" : "border-border-soft bg-white",
+            errors.email ? "border-red-600 bg-red-50" : "border-border-soft bg-surface-strong",
           )}
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "email-error" : undefined}
@@ -80,7 +80,7 @@ export function LoginForm(): ReactElement {
           placeholder="أدخل كلمة المرور"
           className={cn(
             inputBase,
-            errors.password ? "border-red-600 bg-red-50" : "border-border-soft bg-white",
+            errors.password ? "border-red-600 bg-red-50" : "border-border-soft bg-surface-strong",
           )}
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}

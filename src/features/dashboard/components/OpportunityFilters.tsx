@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import type { ReactElement } from "react";
 
@@ -70,7 +70,7 @@ export function OpportunityFilters({
                 onChange={(event) => onSearchChange(event.target.value)}
                 placeholder="اكتب اسم الفرصة أو المجال أو الموقع"
                 className={
-                  "w-full rounded-lg bg-white/60 h-12 pr-12 pl-4 text-base text-foreground placeholder:text-text-secondary outline-none border border-transparent focus:border-emerald-200 focus:ring-2 focus:ring-emerald-100 transition"
+                  "w-full rounded-lg bg-surface-strong h-12 pr-12 pl-4 text-base text-foreground placeholder:text-text-secondary outline-none border border-border-soft focus:border-accent focus:ring-2 focus:ring-accent-soft transition"
                 }
               />
               <svg
@@ -115,52 +115,52 @@ export function OpportunityFilters({
 
               <ul
                 role="listbox"
-                className="absolute z-50 right-0 mt-2 w-48 rounded-md bg-white border border-gray-100 shadow-lg py-1 hidden group-hover:block"
+                className="absolute z-50 right-0 mt-2 w-48 rounded-md bg-surface-strong border border-border-soft shadow-lg py-1 hidden group-hover:block"
               >
                 <li
                   role="option"
                   tabIndex={0}
                   onClick={() => onCategoryChange("all")}
-                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                  className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between"
                 >
                   <span>كل التصنيفات</span>
-                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                  <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span>
                 </li>
                 <li
                   role="option"
                   tabIndex={0}
                   onClick={() => onCategoryChange("educational")}
-                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                  className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between"
                 >
                   <span>{CATEGORY_LABELS.educational}</span>
-                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                  <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span>
                 </li>
                 <li
                   role="option"
                   tabIndex={0}
                   onClick={() => onCategoryChange("health")}
-                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                  className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between"
                 >
                   <span>{CATEGORY_LABELS.health}</span>
-                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                  <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span>
                 </li>
                 <li
                   role="option"
                   tabIndex={0}
                   onClick={() => onCategoryChange("environmental")}
-                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                  className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between"
                 >
                   <span>{CATEGORY_LABELS.environmental}</span>
-                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                  <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span>
                 </li>
                 <li
                   role="option"
                   tabIndex={0}
                   onClick={() => onCategoryChange("social")}
-                  className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                  className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between"
                 >
                   <span>{CATEGORY_LABELS.social}</span>
-                  <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                  <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span>
                 </li>
               </ul>
             </div>
@@ -178,18 +178,18 @@ export function OpportunityFilters({
                 </svg>
               </button>
 
-              <ul role="listbox" className="absolute z-50 right-0 mt-2 w-56 rounded-md bg-white border border-gray-100 shadow-lg py-1 hidden group-hover:block max-h-60 overflow-auto">
-                <li className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between" onClick={() => onLocationChange("")}>كل المواقع <span className="opacity-0 hover:opacity-100 text-gray-400">›</span></li>
+              <ul role="listbox" className="absolute z-50 right-0 mt-2 w-56 rounded-md bg-surface-strong border border-border-soft shadow-lg py-1 hidden group-hover:block max-h-60 overflow-auto">
+                <li className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between" onClick={() => onLocationChange("")}>كل المواقع <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span></li>
                 {locationOptions.map((option) => (
                   <li
                     key={option}
-                    className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                    className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between"
                     onClick={() => onLocationChange(option)}
                     role="option"
                     tabIndex={0}
                   >
                     <span className="truncate">{option}</span>
-                    <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                    <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span>
                   </li>
                 ))}
               </ul>
@@ -208,18 +208,18 @@ export function OpportunityFilters({
                 </svg>
               </button>
 
-              <ul role="listbox" className="absolute z-50 right-0 mt-2 w-56 rounded-md bg-white border border-gray-100 shadow-lg py-1 hidden group-hover:block max-h-60 overflow-auto">
-                <li className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between" onClick={() => onSkillChange("")}>كل المهارات <span className="opacity-0 hover:opacity-100 text-gray-400">›</span></li>
+              <ul role="listbox" className="absolute z-50 right-0 mt-2 w-56 rounded-md bg-surface-strong border border-border-soft shadow-lg py-1 hidden group-hover:block max-h-60 overflow-auto">
+                <li className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between" onClick={() => onSkillChange("")}>كل المهارات <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span></li>
                 {skillOptions.map((option) => (
                   <li
                     key={option}
-                    className="px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer flex items-center justify-between"
+                    className="px-3 py-2 text-sm hover:bg-accent-soft cursor-pointer flex items-center justify-between"
                     onClick={() => onSkillChange(option)}
                     role="option"
                     tabIndex={0}
                   >
                     <span className="truncate">{option}</span>
-                    <span className="opacity-0 hover:opacity-100 text-gray-400">›</span>
+                    <span className="opacity-0 hover:opacity-100 text-text-secondary">›</span>
                   </li>
                 ))}
               </ul>

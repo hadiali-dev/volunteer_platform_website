@@ -114,8 +114,8 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps): ReactEle
           {opportunity.description}
         </p>
 
-        <div className="flex flex-wrap items-center gap-2 pt-1 text-sm text-emerald-800">
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-800">
+        <div className="flex flex-wrap items-center gap-2 pt-1 text-sm text-text-secondary">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/20 bg-accent-soft/30 px-2.5 py-1 text-accent-strong">
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4"
@@ -133,7 +133,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps): ReactEle
             {opportunity.location}
           </span>
 
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-800">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/20 bg-accent-soft/30 px-2.5 py-1 text-accent-strong">
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4"
@@ -152,7 +152,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps): ReactEle
             {opportunity.maxVolunteers} متطوع
           </span>
 
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-800">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/20 bg-accent-soft/30 px-2.5 py-1 text-accent-strong">
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4"
@@ -168,7 +168,7 @@ export function OpportunityCard({ opportunity }: OpportunityCardProps): ReactEle
             {opportunity.likes.length}
           </span>
 
-          <span className="inline-flex items-center gap-1.5 rounded-md border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-emerald-800">
+          <span className="inline-flex items-center gap-1.5 rounded-md border border-accent/20 bg-accent-soft/30 px-2.5 py-1 text-accent-strong">
             <svg
               viewBox="0 0 24 24"
               className="h-4 w-4"

@@ -66,7 +66,7 @@ export function RegisterForm(): ReactElement {
           type="text"
           autoComplete="name"
           placeholder="أدخل اسمك الكامل"
-          className={cn(inputBase, errors.name ? "border-red-600 bg-red-50" : "border-border-soft bg-white")}
+          className={cn(inputBase, errors.name ? "border-red-600 bg-red-50" : "border-border-soft bg-surface-strong")}
           aria-invalid={!!errors.name}
           aria-describedby={errors.name ? "name-error" : undefined}
           {...register("name")}
@@ -87,7 +87,7 @@ export function RegisterForm(): ReactElement {
           type="email"
           autoComplete="email"
           placeholder="name@example.com"
-          className={cn(inputBase, errors.email ? "border-red-600 bg-red-50" : "border-border-soft bg-white")}
+          className={cn(inputBase, errors.email ? "border-red-600 bg-red-50" : "border-border-soft bg-surface-strong")}
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? "email-error" : undefined}
           {...register("email")}
@@ -108,7 +108,7 @@ export function RegisterForm(): ReactElement {
           type="password"
           autoComplete="new-password"
           placeholder="6 أحرف على الأقل"
-          className={cn(inputBase, errors.password ? "border-red-600 bg-red-50" : "border-border-soft bg-white")}
+          className={cn(inputBase, errors.password ? "border-red-600 bg-red-50" : "border-border-soft bg-surface-strong")}
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? "password-error" : undefined}
           {...register("password")}
@@ -126,7 +126,7 @@ export function RegisterForm(): ReactElement {
         </label>
         <select
           id="role"
-          className={cn(inputBase, "border-border-soft bg-white")}
+          className={cn(inputBase, "border-border-soft bg-surface-strong")}
           {...register("role")}
         >
           <option value="student">متطوع</option>
