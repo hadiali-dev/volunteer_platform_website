@@ -65,57 +65,61 @@ export function MyApplicationsList({
 
   return (
     <section className="grid gap-4 lg:grid-cols-2">
-      {applications.map((application) => (
-        <article
-          key={application._id}
-          className="overflow-hidden rounded-2xl border border-border-soft bg-surface shadow-[0_6px_18px_rgba(33,37,41,0.08)]"
-        >
-          <div className="flex min-h-44 flex-col md:flex-row">
-            <div className="relative h-44 md:h-auto md:w-44">
-              <Image
-                src={resolveImageSrc(application.opportunity.image, application.opportunity._id)}
-                alt={`صورة فرصة ${application.opportunity.title}`}
-                fill
-                unoptimized
-                className="object-cover"
-              />
-            </div>
+      {applications.map((application) => {
+        if (!application.opportunity) return null;
+        
+        return (
+          <article
+            key={application._id}
+            className="overflow-hidden rounded-2xl border border-border-soft bg-surface shadow-[0_6px_18px_rgba(33,37,41,0.08)]"
+          >
+            <div className="flex min-h-44 flex-col md:flex-row">
+              <div className="relative h-44 md:h-auto md:w-44">
+                <Image
+                  src={resolveImageSrc(application.opportunity.image, application.opportunity._id)}
+                  alt={`صورة فرصة ${application.opportunity.title}`}
+                  fill
+                  unoptimized
+                  className="object-cover"
+                />
+              </div>
 
-            <div className="grid flex-1 gap-3 p-5">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span
-                  className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${statusClassName[application.status]}`}
-                >
-                  {statusLabel[application.status]}
-                </span>
-                <p className="text-xs text-text-secondary">
-                  تاريخ التقديم: {formatDate(application.appliedAt)}
+              <div className="grid flex-1 gap-3 p-5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span
+                    className={`inline-flex rounded-full px-3 py-1 text-xs font-bold ${statusClassName[application.status]}`}
+                  >
+                    {statusLabel[application.status]}
+                  </span>
+                  <p className="text-xs text-text-secondary">
+                    تاريخ التقديم: {formatDate(application.appliedAt)}
+                  </p>
+                </div>
+
+                <h3 className="line-clamp-2 text-xl font-semibold leading-tight text-foreground">
+                  {application.opportunity.title}
+                </h3>
+
+                <p className="line-clamp-2 text-sm leading-7 text-text-secondary">
+                  {application.opportunity.description}
                 </p>
-              </div>
 
-              <h3 className="line-clamp-2 text-xl font-semibold leading-tight text-foreground">
-                {application.opportunity.title}
-              </h3>
-
-              <p className="line-clamp-2 text-sm leading-7 text-text-secondary">
-                {application.opportunity.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2 pt-1 text-xs text-emerald-800">
-                <span className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1">
-                  الموقع: {application.opportunity.location}
-                </span>
-                <span className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1">
-                  تاريخ الفرصة: {formatDate(application.opportunity.date)}
-                </span>
-                <span className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1">
-                  الجهة: {application.opportunity.organization?.name ?? "جهة تطوعية"}
-                </span>
+                <div className="flex flex-wrap gap-2 pt-1 text-xs text-emerald-800">
+                  <span className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1">
+                    الموقع: {application.opportunity.location}
+                  </span>
+                  <span className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1">
+                    تاريخ الفرصة: {application.opportunity.date ? formatDate(application.opportunity.date) : "غير محدد"}
+                  </span>
+                  <span className="rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1">
+                    الجهة: {application.opportunity.organization?.name ?? "جهة تطوعية"}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        </article>
-      ))}
+          </article>
+        );
+      })}
     </section>
   );
 }

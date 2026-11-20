@@ -106,24 +106,24 @@ export const ApplicationStatusSchema = RawApplicationStatusSchema.transform((sta
 
 export const ApplicationOpportunitySchema = z.object({
   _id: z.string(),
-  title: z.string(),
-  description: z.string(),
+  title: z.string().default("فرصة غير متوفرة"),
+  description: z.string().default(""),
   image: z.string().nullable().optional(),
-  location: z.string(),
-  category: OpportunityCategorySchema.optional(),
+  location: z.string().default(""),
+  category: OpportunityCategorySchema.nullable().optional(),
   requiredSkills: z.array(z.string()).default([]),
-  date: z.string(),
+  date: z.string().optional().nullable(),
   hours: z.number().int().nonnegative().optional(),
   status: z.enum(["open", "closed"]).optional(),
   maxVolunteers: z.number().int().nonnegative().optional(),
-  organization: OpportunityOrganizationSchema.optional(),
+  organization: OpportunityOrganizationSchema.nullable().optional(),
 });
 
 export const ApplicationSchema = z.object({
   _id: z.string(),
   status: ApplicationStatusSchema,
   appliedAt: z.string(),
-  opportunity: ApplicationOpportunitySchema,
+  opportunity: ApplicationOpportunitySchema.nullable().default(null),
 });
 
 export const MyApplicationsQuerySchema = z.object({
