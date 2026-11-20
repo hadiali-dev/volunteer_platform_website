@@ -280,6 +280,7 @@ export const useApplyToOpportunity = (): UseMutationResult<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [MY_APPLICATIONS_QUERY_KEY] });
+      queryClient.invalidateQueries({ queryKey: [NOTIFICATIONS_QUERY_KEY] });
     },
   });
 };

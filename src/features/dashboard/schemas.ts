@@ -87,7 +87,12 @@ export const NotificationSchema = z.object({
   _id: z.string(),
   message: z.string(),
   type: z
-    .enum(["general", "application_accepted", "application_rejected"])
+    .enum([
+      "general",
+      "application_accepted",
+      "application_rejected",
+      "application_pending",
+    ])
     .default("general"),
   isRead: z.boolean(),
   createdAt: z.string(),

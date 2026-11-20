@@ -26,6 +26,10 @@ const notificationTypeMeta: Record<
     label: "تم رفض الطلب",
     className: "border-red-200 bg-red-100 text-red-700",
   },
+  application_pending: {
+    label: "تم إرسال الطلب",
+    className: "border-blue-200 bg-blue-100 text-blue-700",
+  },
 };
 
 export function NotificationsList({
@@ -59,6 +63,8 @@ export function NotificationsList({
                   ? "bg-emerald-100 text-emerald-700"
                   : notification.type === "application_rejected"
                   ? "bg-red-100 text-red-700"
+                  : notification.type === "application_pending"
+                  ? "bg-blue-100 text-blue-700"
                   : "bg-slate-100 text-slate-700"
               }`}
             >
@@ -69,6 +75,11 @@ export function NotificationsList({
               ) : notification.type === "application_rejected" ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden>
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-2.293-9.293a1 1 0 011.414 0L10 8.586l1.879-1.879a1 1 0 111.414 1.414L11.414 10l1.879 1.879a1 1 0 11-1.414 1.414L10 11.414l-1.879 1.879a1 1 0 11-1.414-1.414L8.586 10 6.707 8.121a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              ) : notification.type === "application_pending" ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M22 2L11 13" />
+                  <path d="M22 2L15 22L11 13L2 9L22 2Z" />
                 </svg>
               ) : (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden>

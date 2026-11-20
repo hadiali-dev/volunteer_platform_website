@@ -15,9 +15,9 @@ const statusLabel: Record<ApplicationStatus, string> = {
 };
 
 const statusClassName: Record<ApplicationStatus, string> = {
-  pending: "bg-emerald-100 text-emerald-800",
+  pending: "bg-blue-100 text-blue-800",
   accepted: "bg-emerald-100 text-emerald-800",
-  rejected: "bg-emerald-100 text-emerald-800",
+  rejected: "bg-red-100 text-red-800",
 };
 
 const PLACEHOLDER_IMAGES = [
